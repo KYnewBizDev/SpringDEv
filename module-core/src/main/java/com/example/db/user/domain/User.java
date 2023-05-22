@@ -1,0 +1,69 @@
+package com.example.db.user.domain;
+
+import jakarta.persistence.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.Comment;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import java.time.LocalDateTime;
+
+@Entity
+@EntityListeners(AuditingEntityListener.class)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter
+public class User {
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(nullable = false)
+  @Comment("고유값")
+  private Integer userIdx;
+  @Column(length = 100)
+  @Comment("이름")
+  private String name;
+  @Column(length = 100)
+  @Comment("아이디")
+  private String id;
+  @Column(length = 100)
+  @Comment("비밀번호")
+  private String pwd;
+  @Column(length = 10)
+  @Comment("권한")
+  private String role;
+  @CreatedDate
+  @Column(updatable = false)
+  @ColumnDefault("CURRENT_TIMESTAMP")
+  @Comment("등록일")
+  private LocalDateTime registerDate;
+  @Comment("작성자 PK")
+  private Integer registerIdx;
+  @LastModifiedDate
+  @Comment("수정일")
+  private LocalDateTime modifyDate;
+  @Comment("수정자 PK")
+  private Integer modifyIdx;
+  @Column(length = 1, insertable = false)
+  @ColumnDefault("'N'")
+  @Comment("삭제여부")
+  private String isDelete;
+
+  // 생성자
+  @Builder
+  public User(Integer userIdx, String name, String id, String role, String pwd, LocalDateTime registerDate, Integer registerIdx, LocalDateTime modifyDate, Integer modifyIdx, String isDelete) {
+    this.userIdx = userIdx;
+    this.name = name;
+    this.id = id;
+    this.pwd = pwd;
+    this.role = role;
+    this.registerDate = registerDate;
+    this.registerIdx = registerIdx;
+    this.modifyDate = modifyDate;
+    this.modifyIdx = modifyIdx;
+    this.isDelete = isDelete;
+  }
+}

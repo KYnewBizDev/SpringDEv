@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" th:fragment="template(css, js, content)">
+<th:block th:replace="~{layout/head :: headFragment(${css}, ${js})}"></th:block>
+
+<body>
+  <div id="wrapper">
+    <th:block th:replace="~{layout/header :: headerFragment}"></th:block>
+    <th:block th:replace="${content}"></th:block> <!-- content -->
+    <th:block th:replace="~{layout/footer :: footerFragment}"></th:block>
+  </div>
+</body>
+</html>

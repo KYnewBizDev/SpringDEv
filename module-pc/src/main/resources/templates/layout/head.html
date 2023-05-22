@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head th:fragment="headFragment(css, js)">
+    <meta charset="utf-8">
+    <title th:text="${T(com.example.Define).SITE_NAME}"></title>
+    <link rel="shortcut icon" th:href="@{{IMG_DIR}/logo.png (IMG_DIR=${T(com.example.Define).IMG_DIR})}">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta property="og:type" content="website">
+    <meta property="og:title" th:content="${T(com.example.Define).SITE_NAME}">
+    <meta property="og:description" th:content="${T(com.example.Define).SITE_NAME}">
+    <meta property="og:image" th:content="@{{IMG_DIR}/logo.png (IMG_DIR=${T(com.example.Define).IMG_DIR})}" />
+    <meta property="og:url" th:content="${T(com.example.Define).DOMAIN}">
+    <link rel="canonical" href="">
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0">
+    <meta name="viewport" content="width=1260">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+
+    <!-- 공통 CSS -->
+    <link type="text/css" rel="stylesheet" href="/css/common.css">
+    <link type="text/css" rel="stylesheet" href="/extension/summernote/summernote-lite.min.css"> <!--editor-->
+    <link type="text/css" rel="stylesheet" href="/extension/colorbox/colorbox.min.css"> <!--layer-->
+    <!-- //공통 CSS -->
+
+    <!-- 공통 JS -->
+    <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <script type="text/javascript" src="/js/common.js"></script>
+    <script src="/extension/summernote/summernote-lite.min.js"></script> <!--editor-->
+    <script src="/extension/summernote/lang/summernote-ko-KR.min.js"></script> <!--editor-->
+    <script src="/extension/colorbox/jquery.colorbox-min.min.js"></script> <!--layer-->
+    <!-- //공통 JS -->
+
+    <th:block th:replace="${css}" /> <!-- content css -->
+    <th:block th:replace="${js}" /> <!-- content js -->
+
+  </head>
+</html>

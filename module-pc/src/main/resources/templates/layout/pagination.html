@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<th:block th:fragment="pageFragment(page, totalPages)">
+
+<div class="pagination">
+  <ul class="paging" th:if="${page>0 && totalPages>0}" th:with="
+    pageSize = 10
+    , start = ${T(java.lang.Math).floor((page - 1) / pageSize) * pageSize + 1}
+    , endTemp = ${(start + pageSize - 1) < totalPages ? (start + pageSize - 1) : totalPages}
+    , end = ${endTemp <= 0 ? 1 : endTemp}
+    , prev = ${(start>1) ? start-1 : start}
+    , next = ${(totalPages>end) ? end+1 : end}
+  ">
+    <li><button class="btn_arrow first" th:onclick="|movePage(1)|"></button></li>
+    <li><button class="btn_arrow prev" th:onclick="|movePage(${prev})|"></button></li>
+    <li class="num">
+
+      <a href="javascript:void(0);" th:each="k: ${#numbers.sequence(start, end)}" th:classappend="${k == page}?'on'" th:onclick="|movePage(${k})|" th:text="${k}"></a>
+
+    </li>
+    <li><button class="btn_arrow next" th:onclick="|movePage(${next})|"></button></li>
+    <li><button class="btn_arrow last" th:onclick="|movePage(${totalPages})|"></button></li>
+  </ul>
+</div>
+
+</th:block>
+</html>

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout/default_layout :: template(~{::css}, ~{::js}, ~{::content})}">
+<th:block th:fragment="css">
+  <link type="text/css" rel="stylesheet" href="/css/test.css">
+</th:block>
+<th:block th:fragment="js"></th:block>
+<th:block th:fragment="content">
+
+
+  <H3>로그인</H3>
+
+  <form method="post" action="/login">
+    <table class="view">
+      <tr>
+        <th>아이디</th>
+        <td><input type="text" id="id" name="id" placeholder="아이디"></td>
+      </tr>
+      <tr>
+        <th>비밀번호</th>
+        <td><input type="password" id="pwd" name="pwd" placeholder="비밀번호"></td>
+      </tr>
+    </table>
+
+    <div class="bottom-btn">
+      <button type="submit">로그인</button>
+    </div>
+  </form>
+
+
+</th:block>
+</html>

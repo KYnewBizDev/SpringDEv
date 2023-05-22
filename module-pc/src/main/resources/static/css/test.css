@@ -1,0 +1,63 @@
+/* list */
+table{table-layout: fixed; word-break: break-all; border-collapse: collapse; width: 100%;}
+
+table.list{border-top: 1px solid #000; border-bottom:  1px solid #efefef; margin-bottom: 30px;}
+table.list.w97{position: fixed; width: 65%; background: #fff; border-top: 1px solid;}
+table.list th, table.list td{text-align: center; padding: 12px 0;}
+table.list th{font-size: 12px; letter-spacing: -.5px; line-height: 14px; border-bottom:  1px solid #ccc;}
+table.list td{font-size: 13px; letter-spacing: -.5px; line-height: 15px; word-spacing: 0.3rem;}
+table.list tr:nth-child(even){background: #f7f7f7;}
+table.list td a{display: inline-block; }
+table.list a:hover{color: #09aab3; text-decoration: underline;}
+table.list td div{width: 100% !important; white-space: normal !important; }
+
+/* view */
+table.view{width: 100%; border-top: 1px solid #000; border-bottom: 1px solid #ccc; margin-bottom: 50px;}
+table.view th,
+table.view td{position: relative; font-size: 14px; border-top: 1px solid #eee; padding: 15px 0px; /* height: 40px; */}
+table.view td{color: #777; position: relative;}
+table.view tr:first-child th,
+table.view tr:first-child td{border-top: 0;}
+table.view th{width:20%; padding-left: 17px; text-align: left; font-weight: 500;}
+
+
+/* search */
+.search-box{background: #dbe5e7; padding: 25px 30px; border-radius: 5px; overflow: hidden; text-align: center;}
+.search-box li{display: inline-block; margin-right: 10px;}
+.sch{background: #333; border: 1px solid #333; color: #fff; border-radius: 5px;}
+.reset{position: relative; background: transparent; padding: 6px 20px 7px 5px;}
+.reset img{position: absolute; right: 0; top: 8px;}
+
+/* top-btn */
+.top-btn{position: relative; padding: 10px 0; font-size: 15px;float: right;}
+
+/* bottom-btn */
+.bottom-btn{position: relative; padding: 10px 0; font-size: 15px;text-align: center;}
+
+
+/* input, textarea, select, label */
+input, textarea, button{border: 0; font-family: 'Plus Jakarta Sans','Noto Sans KR', 'Malgun Gothic', sans-serif;}
+input:focus, textarea:focus, select{outline: none;}
+input, select, textarea{-webkit-box-shadow: none!important; box-shadow: none!important;}
+input, button, select, label {cursor: pointer;}
+button{border: 0; padding: 6px 20px 7px; border-radius: 5px; background: transparent; margin: 0 3px;}
+textarea{font-size: 14px; line-height: 24px; border: 1px solid #eaeaea;}
+select{padding: 9px 10px; border: 1px solid #e1e1e1; border-radius: 5px; margin: 0 3px; height: 39px;}
+select:first-child{margin: 0 3px 0 0;}
+
+/*input */
+input{padding: 9px 10px 10px; border: 1px solid #e1e1e1; border-radius: 5px; margin-right: 5px; cursor: auto;}
+input:focus{border: 1px solid #333;}
+input[type='checkbox'],input[type=radio]{width: 18px; height: 18px; vertical-align: text-top; accent-color: steelblue}
+input[type='file']{padding: 0;}
+input[type='text'].title{width: 695px !important;}
+input[type='text'].comment{width: 880px !important;}
+input[type='text'].no{width: 52px !important;}
+input[type='text'].url{width: 510px !important;}
+input[type='text'].info{width: 150px !important;}
+
+
+button{background: #09aab3; color: #fff; border: 1px solid #09aab3; margin: 0 auto; width: fit-content;}
+
+
+

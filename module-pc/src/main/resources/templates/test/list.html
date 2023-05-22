@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout/default_layout :: template(~{::css}, ~{::js}, ~{::content})}">
+<th:block th:fragment="css">
+  <link type="text/css" rel="stylesheet" href="/css/test.css">
+</th:block>
+<th:block th:fragment="js"></th:block>
+<th:block th:fragment="content">
+
+
+  <H3>목록</H3>
+
+  <!-- search -->
+  <div class="search-box">
+    <form method="get">
+      <div>
+        <select name="searchType" id="searchType">
+          <option value="">전체</option>
+          <option value="testName" th:selected="${param.searchType == 'testName'}">이름</option>
+          <option value="originalFileName" th:selected="${param.searchType == 'originalFileName'}">첨부파일명</option>
+        </select>
+        <input type="text" name="searchWord" id="searchWord" th:value="${param.searchWord}" placeholder="검색">
+        <button type="submit">검색</button>
+      </div>
+    </form>
+  </div>
+  <!-- // search -->
+
+  <div class="top-btn" style="float: left;">
+    <button type="button" onclick="popup()">팝업</button>
+    <button type="button" class="iframe" href="/popup">레이어</button>
+    <button type="button" class="inline" href="#inline_content">레이어 (inline HTML)</button>
+
+    <div style="display:none">
+      <div id="inline_content">
+        <H3>inline 테스트입니다.</H3>
+      </div>
+    </div>
+
+    <script type="text/javascript">
+      function popup(){
+        window.open("/popup", "popup", "top=10, left=10, width=500, height=600, status=no, menubar=no, toolbar=no, resizable=no");
+      }
+
+			$(document).ready(function(){
+				$(".iframe").colorbox({iframe:true, width:"80%", height:"80%"});
+				$(".inline").colorbox({inline:true, width:"80%", height:"80%"});
+			});
+    </script>
+
+    <button type="button" th:onclick="|location.href='@{/email}'|">Email발송</button>
+    <button type="button" th:onclick="|location.href='@{/sms}'|">SMS DB접속</button>
+    <button type="button" th:onclick="|location.href='@{/fileDownZip}'|">파일ZIP 다운로드</button>
+  </div>
+  <div class="top-btn">
+    <button type="button" th:onclick="|location.href='@{/test/add}'|">등록</button>
+    <button type="button" th:onclick="|location.href='@{/test/excelUpload}'|">엑셀업로드</button>
+    <button type="button" th:onclick="|location.href='@{/test/excel}'|">엑셀다운로드</button>
+  </div>
+  <!-- list -->
+  <table class="list">
+    <tr>
+      <th>idx</th>
+      <th>이름</th>
+      <th>첨부파일명</th>
+      <th>등록일</th>
+      <th>오픈여부</th>
+    </tr>
+    <tr th:each="row : ${list}">
+      <td><a href="item.html" th:href="@{/test/detail/{testIdx}(testIdx=${row.testIdx})}" th:text="${row.testIdx}">회원id</a></td>
+      <td th:text="${row.testName}"></td>
+      <td th:text="${row.originalFileName}"></td>
+      <td th:text="${#temporals.format(row.registerDate, 'yy.MM.dd')}"></td>
+      <td th:text="${row.isOpen}"></td>
+    </tr>
+  </table>
+  <!-- // list -->
+
+  <!-- list paging -->
+  <th:block th:replace="~{layout/pagination :: pageFragment(${page},${list.totalPages})}"></th:block>
+  <!-- // list paging -->
+
+</th:block>
+</html>

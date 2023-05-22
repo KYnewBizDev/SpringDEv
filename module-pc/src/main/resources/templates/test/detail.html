@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout/default_layout :: template(~{::css}, ~{::js}, ~{::content})}">
+<th:block th:fragment="css">
+  <link type="text/css" rel="stylesheet" href="/css/test.css">
+</th:block>
+<th:block th:fragment="js"></th:block>
+<th:block th:fragment="content">
+
+
+  <H3>상세</H3>
+
+  <table class="view">
+    <tr>
+      <th>idx</th>
+      <td th:text="${row.testIdx}"></td>
+    </tr>
+    <tr>
+      <th>이름</th>
+      <td th:text="${row.testName}"></td>
+    </tr>
+    <tr>
+      <th>메모</th>
+      <td th:utext="${row.memo}"></td>
+    </tr>
+    <tr>
+      <th>등록일</th>
+      <td th:text="${#temporals.format(row.registerDate, 'yy.MM.dd')}"></td>
+    </tr>
+    <tr>
+      <th>오픈여부</th>
+      <td th:text="${row.isOpen}"></td>
+    </tr>
+    <tr>
+      <th>첨부파일</th>
+      <td>
+        <a th:if="${row.fileName}" th:href="|/common/fileDown/${row.fileName}/${row.originalFileName}|" th:text="${row.originalFileName}" /><br/>
+        <img th:if="${row.fileName}" th:src="|/common/imgDown/${row.fileName}|" width="300" height="300"/>
+      </td>
+    </tr>
+  </table>
+
+  <div class="bottom-btn">
+    <button type="button" th:onclick="|location.href='@{/test/edit/{testIdx}(testIdx=${row.testIdx})}'|">수정</button>
+    <button type="button" th:onclick="|location.href='@{/test/delete/{testIdx}(testIdx=${row.testIdx})}'|">삭제</button>
+    <button type="button" th:onclick="|location.href='@{/test/list}'|">목록</button>
+  </div>
+
+</th:block>
+</html>

@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<th:block th:fragment="headerFragment">
+  <header>
+    헤더
+    <a href="/test/list">게시판</a>
+    <a href="/user/list">관리자관리</a>
+
+    <a href="/login" th:unless="${session.LOGIN}">로그인</a>
+    <a href="/logout" th:if="${session.LOGIN}">로그아웃</a>
+    <span th:if="${session.LOGIN}" th:text="|${session.LOGIN.name}님|"> 로그인계정이름 </span>
+
+  </header>
+</th:block>
+</html>

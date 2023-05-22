@@ -1,0 +1,5 @@
+rootProject.name = 'unistudy'
+include 'module-core'
+include 'module-pc'
+include 'module-admin'
+

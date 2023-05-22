@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout/default_layout :: template(~{::css}, ~{::js}, ~{::content})}">
+<th:block th:fragment="css">
+  <link type="text/css" rel="stylesheet" href="/css/test.css">
+</th:block>
+<th:block th:fragment="js"></th:block>
+<th:block th:fragment="content">
+
+
+  <H3>수정 폼</H3>
+
+  <form method="post" th:object="${row}" enctype="multipart/form-data">
+    <input type="hidden" th:field="*{userIdx}">
+    <table class="view">
+      <tr>
+        <th>이름</th>
+        <td>
+          <input type="text" th:field="*{name}" placeholder="이름" th:errorclass="field-error">
+          <div class="field-error" th:errors="*{name}">
+            이름을 입력해주세요
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <th>ID</th>
+        <td><input type="text" th:field="*{id}" placeholder="ID" readonly></td>
+      </tr>
+      <tr>
+        <th>비밀번호</th>
+        <td>
+          <input type="password" th:field="*{pwd}" placeholder="비밀번호" th:errorclass="field-error">
+          <div class="field-error" th:errors="*{pwd}">
+            비밀번호를 입력해주세요
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <th>권한</th>
+        <td>
+          <input type="text" th:field="*{role}" placeholder="ADMIN" th:errorclass="field-error">
+          <div class="field-error" th:errors="*{role}">
+            권한을 입력해주세요
+          </div>
+        </td>
+      </tr>
+    </table>
+
+    <div class="bottom-btn">
+      <button type="submit">수정</button>
+      <button type="button" th:onclick="|location.href='@{/user/detail/{userIdx}(userIdx=${row.userIdx})}'|">취소</button>
+    </div>
+  </form>
+
+
+</th:block>
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout/default_layout :: template(~{::css}, ~{::js}, ~{::content})}">
+<th:block th:fragment="css">
+  <link type="text/css" rel="stylesheet" href="/css/test.css">
+</th:block>
+<th:block th:fragment="js"></th:block>
+<th:block th:fragment="content">
+
+
+  <H3>목록</H3>
+
+  <!-- search -->
+  <div class="search-box">
+    <form method="get">
+      <div>
+        <select name="searchType" id="searchType">
+          <option value="">전체</option>
+          <option value="id" th:selected="${param.searchType == 'id'}">ID</option>
+          <option value="name" th:selected="${param.searchType == 'name'}">이름</option>
+        </select>
+        <input type="text" name="searchWord" id="searchWord" th:value="${param.searchWord}" placeholder="검색">
+        <button type="submit">검색</button>
+      </div>
+    </form>
+  </div>
+  <!-- // search -->
+
+  <div class="top-btn">
+    <button type="button" th:onclick="|location.href='@{/user/add}'|">등록</button>
+  </div>
+  <!-- list -->
+  <table class="list">
+    <tr>
+      <th>idx</th>
+      <th>이름</th>
+      <th>ID</th>
+      <th>권한</th>
+      <th>등록일</th>
+    </tr>
+    <tr th:each="row : ${list}">
+      <td><a href="item.html" th:href="@{/user/detail/{userIdx}(userIdx=${row.userIdx})}" th:text="${row.userIdx}">회원id</a></td>
+      <td th:text="${row.name}"></td>
+      <td th:text="${row.id}"></td>
+      <td th:text="${row.role}"></td>
+      <td th:text="${#temporals.format(row.registerDate, 'yy.MM.dd')}"></td>
+    </tr>
+  </table>
+  <!-- // list -->
+
+  <!-- list paging -->
+  <th:block th:replace="~{layout/pagination :: pageFragment(${page},${list.totalPages})}"></th:block>
+  <!-- // list paging -->
+
+</th:block>
+</html>

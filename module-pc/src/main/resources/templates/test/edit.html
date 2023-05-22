@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout/default_layout :: template(~{::css}, ~{::js}, ~{::content})}">
+<th:block th:fragment="css">
+  <link type="text/css" rel="stylesheet" href="/css/test.css">
+</th:block>
+<th:block th:fragment="js"></th:block>
+<th:block th:fragment="content">
+
+
+  <H3>수정 폼</H3>
+
+  <form method="post" th:object="${row}" enctype="multipart/form-data">
+    <input type="hidden" th:field="*{testIdx}">
+    <table class="view">
+      <tr>
+        <th>이름</th>
+        <td><input type="text" th:field="*{testName}" placeholder="이름"></td>
+      </tr>
+      <tr>
+        <th>오픈여부</th>
+        <td>
+          <input type="checkbox" id="isOpen" th:field="*{isOpen}" value="Y">
+          <label for="isOpen">오픈</label>
+        </td>
+      </tr>
+      <tr>
+        <th>메모</th>
+        <td><textarea th:field="*{memo}"></textarea></td>
+      </tr>
+      <tr>
+        <th>첨부파일</th>
+        <td>
+          <input type="file" id="file" name="file" >
+        </td>
+      </tr>
+    </table>
+
+    <div class="bottom-btn">
+      <button type="submit">수정</button>
+      <button type="button" th:onclick="|location.href='@{/test/detail/{testIdx}(testIdx=${row.testIdx})}'|">취소</button>
+    </div>
+  </form>
+
+  <script type="text/javascript">
+    Editor('#memo'); // 에디터
+  </script>
+
+</th:block>
+</html>

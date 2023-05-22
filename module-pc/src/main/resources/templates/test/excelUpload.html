@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout/default_layout :: template(~{::css}, ~{::js}, ~{::content})}">
+<th:block th:fragment="css">
+  <link type="text/css" rel="stylesheet" href="/css/test.css">
+</th:block>
+<th:block th:fragment="js"></th:block>
+<th:block th:fragment="content">
+
+
+  <H3>엑셀업로드 폼</H3>
+
+  <form method="post" id="frm" name="frm" enctype="multipart/form-data">
+    <table class="view">
+    <tr>
+      <th>엑셀 업로드 파일</th>
+      <td>
+        <input type="file" id="excelFile" name="excelFile">
+      </td>
+    </tr>
+    </table>
+
+    <div class="bottom-btn">
+      <button type="submit">등록</button>
+      <button type="button" th:onclick="|location.href='@{/test/list}'|">취소</button>
+    </div>
+  </form>
+
+</th:block>
+</html>
