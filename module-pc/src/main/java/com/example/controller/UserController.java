@@ -6,6 +6,7 @@ import com.example.db.user.dto.UserSaveDto;
 import com.example.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -66,14 +67,20 @@ public class UserController {
 
     if (bindingResult.hasErrors()) return "user/add"; // 검증실패시 return
 
+//    String encPwd = passwordEncoding.encode(userSaveDto.getPwd()); // 비밀번호 암호화
+//    UserDto userDto = new UserDto();
+//    userDto.setName(userSaveDto.getName());
+//    userDto.setId(userSaveDto.getId());
+//    userDto.setPwd(encPwd);
+//    userDto.setRole(userSaveDto.getRole());
+//    userDto.setRegisterIdx((Integer) authentication.getPrincipal()); // 로그인 PK
+//    userDto.setModifyIdx((Integer) authentication.getPrincipal()); // 로그인 PK
+//    Integer userIdx = userService.saveUser(userDto);
+
+//    수정 후
     String encPwd = passwordEncoding.encode(userSaveDto.getPwd()); // 비밀번호 암호화
-    UserDto userDto = new UserDto();
-    userDto.setName(userSaveDto.getName());
-    userDto.setId(userSaveDto.getId());
-    userDto.setPwd(encPwd);
-    userDto.setRole(userSaveDto.getRole());
-    userDto.setRegisterIdx((Integer) authentication.getPrincipal()); // 로그인 PK
-    userDto.setModifyIdx((Integer) authentication.getPrincipal()); // 로그인 PK
+    UserDto userDto = UserDto.builder().pwd(encPwd).registerIdx((Integer) authentication.getPrincipal()).build();
+    BeanUtils.copyProperties(userSaveDto, userDto,"pwd","registerIdx");
     Integer userIdx = userService.saveUser(userDto);
 
     if(userIdx == null){
