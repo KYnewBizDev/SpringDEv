@@ -1,8 +1,7 @@
-package com.example.test.domain;
+package com.example.db.sms.domain;
 
 import static com.querydsl.core.types.PathMetadataFactory.*;
 
-import com.example.db.test.domain.Test;
 import com.querydsl.core.types.dsl.*;
 
 import com.querydsl.core.types.PathMetadata;
@@ -11,14 +10,14 @@ import com.querydsl.core.types.Path;
 
 
 /**
- * QTest is a Querydsl query type for Test
+ * QSms is a Querydsl query type for Sms
  */
 @Generated("com.querydsl.codegen.DefaultEntitySerializer")
-public class QTest extends EntityPathBase<Test> {
+public class QSms extends EntityPathBase<Sms> {
 
-    private static final long serialVersionUID = -827649007L;
+    private static final long serialVersionUID = 1878527619L;
 
-    public static final QTest test = new QTest("test");
+    public static final QSms sms = new QSms("sms");
 
     public final StringPath fileName = createString("fileName");
 
@@ -27,10 +26,6 @@ public class QTest extends EntityPathBase<Test> {
     public final StringPath isOpen = createString("isOpen");
 
     public final StringPath memo = createString("memo");
-
-    public final DateTimePath<java.time.LocalDateTime> modifyDate = createDateTime("modifyDate", java.time.LocalDateTime.class);
-
-    public final NumberPath<Integer> modifyIdx = createNumber("modifyIdx", Integer.class);
 
     public final StringPath originalFileName = createString("originalFileName");
 
@@ -44,16 +39,16 @@ public class QTest extends EntityPathBase<Test> {
 
     public final StringPath testPwd = createString("testPwd");
 
-    public QTest(String variable) {
-        super(Test.class, forVariable(variable));
+    public QSms(String variable) {
+        super(Sms.class, forVariable(variable));
     }
 
-    public QTest(Path<? extends Test> path) {
+    public QSms(Path<? extends Sms> path) {
         super(path.getType(), path.getMetadata());
     }
 
-    public QTest(PathMetadata metadata) {
-        super(Test.class, metadata);
+    public QSms(PathMetadata metadata) {
+        super(Sms.class, metadata);
     }
 
 }
