@@ -12,7 +12,7 @@ import org.springframework.util.StringUtils;
 
 import java.util.List;
 
-import static com.example.sms.domain.QSms.sms;
+import static com.example.db.sms.domain.QSms.sms;
 
 @Repository
 public class SmsQueryRepository {

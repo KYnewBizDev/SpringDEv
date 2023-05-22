@@ -12,7 +12,7 @@ import org.springframework.util.StringUtils;
 
 import java.util.List;
 
-import static com.example.user.domain.QUser.user;
+import static com.example.db.user.domain.QUser.user;
 
 @Repository
 public class UserQueryRepository {

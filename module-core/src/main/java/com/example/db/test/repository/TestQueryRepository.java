@@ -12,7 +12,7 @@ import org.springframework.util.StringUtils;
 
 import java.util.List;
 
-import static com.example.test.domain.QTest.test;
+import static com.example.db.test.domain.QTest.test;
 
 @Repository
 public class TestQueryRepository {
