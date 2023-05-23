@@ -1,4 +1,4 @@
-package com.example.util;
+package com.example.utils;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
