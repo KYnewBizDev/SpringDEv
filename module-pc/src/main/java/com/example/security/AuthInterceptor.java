@@ -14,7 +14,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 
 import java.util.List;
 
-// 페이지별 권한체크
+// 메뉴 권한 체크
 @Component
 @RequiredArgsConstructor
 public class AuthInterceptor implements HandlerInterceptor {

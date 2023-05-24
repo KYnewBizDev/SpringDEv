@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
+// 로그인 세션 Dto
 @NoArgsConstructor
 @Getter
 public class LoginDto implements Serializable {

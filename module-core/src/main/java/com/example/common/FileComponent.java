@@ -23,7 +23,7 @@ import java.util.*;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-
+// 파일업로드, 다운로드
 public class FileComponent {
   // 파일 저장이름
   public String createFilename(String str) {
@@ -49,8 +49,6 @@ public class FileComponent {
 
   // 파일 업로드
   public Map<String, String> uploadFile(String savePath, MultipartFile multipartFile) throws IOException {
-    Map<String, String> data = new HashMap<>();
-
     if (multipartFile.isEmpty()) {
       return null;
     }
@@ -97,7 +95,7 @@ public class FileComponent {
       }
 
       // 삭제
-      boolean result = file.delete();
+      file.delete();
     }
   }
 

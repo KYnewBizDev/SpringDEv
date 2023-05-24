@@ -7,6 +7,7 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.context.annotation.Configuration;
 
+// DB 접속 AOP
 @Configuration
 @Aspect
 public class DataSourceAop {

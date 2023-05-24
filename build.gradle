@@ -69,7 +69,7 @@ project(':module-pc') {
 		implementation 'org.springframework.boot:spring-boot-starter-security' // 권한, 비밀번호 암호화 3.0.4
 //		implementation 'org.springframework.boot:spring-boot-starter-data-redis' // redis 3.0.4
 //		implementation 'org.springframework.session:spring-session-data-redis' // redis 3.0.0
-		implementation 'com.google.code.gson:gson:2.10.1' //json (썸머에디터 이미지업로드시 사용) 2.10.1
+		implementation 'com.google.code.gson:gson:2.10.1' // json (썸머에디터 이미지업로드시 사용) 2.10.1
 		implementation project(path: ':module-core')
 	}
 }

@@ -16,10 +16,10 @@ import org.springframework.security.web.SecurityFilterChain;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
-// 로그인, 비밀번호 암호화, 권한체크
+// 로그인, 비밀번호 암호화
+@Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
-@Configuration
 public class SecurityConfig {
   private final AuthService authService;
 

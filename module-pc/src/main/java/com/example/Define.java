@@ -3,6 +3,7 @@ package com.example;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+// 상수 정의
 @Component
 public class Define {
   // 사이트 정보

@@ -6,7 +6,6 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -20,6 +19,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
+// 엑셀
 @Component
 public class ExcelComponent {
   // 엑셀 업로드
@@ -47,7 +47,6 @@ public class ExcelComponent {
 
       for (int i = 1; i <= sheet.getLastRowNum(); i++) {
         XSSFRow row = sheet.getRow(i);
-        XSSFCell cell;
         if (row == null) continue;
 
         List<String> rowData = new ArrayList<>();

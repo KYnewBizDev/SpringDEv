@@ -15,6 +15,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
+// 이메일발송
 @Component
 @RequiredArgsConstructor
 public class MailComponent {

@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+// 파일업로드, 다운로드 (S3)
 @RequiredArgsConstructor
 public class FileS3Component extends FileComponent{
   private final AmazonS3Client amazonS3Client;
@@ -43,7 +44,7 @@ public class FileS3Component extends FileComponent{
       String folder = savePath.substring(bucket.length()+1)+"/";
 
       CopyObjectRequest copyObjectRequest = new CopyObjectRequest(bucket, folder+fileName, bucket, "del/"+folder+fileName);
-      CopyObjectResult response = amazonS3Client.copyObject(copyObjectRequest);
+      amazonS3Client.copyObject(copyObjectRequest);
 
       // 삭제
       amazonS3Client.deleteObject(savePath, fileName);

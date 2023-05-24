@@ -5,6 +5,7 @@ import org.springframework.transaction.support.TransactionSynchronizationManager
 
 import java.util.Objects;
 
+// DB 연결 routing
 public class RoutingDataSource extends AbstractRoutingDataSource {
   @Override
   protected Object determineCurrentLookupKey() {

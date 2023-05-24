@@ -26,7 +26,7 @@ public class UserController {
 
   // 리스트
   @GetMapping("user/list")
-  public String paging(Model model, @RequestParam(value = "page", required = false, defaultValue = "1") Integer page, HttpServletRequest req, Authentication authentication) {
+  public String list(Model model, @RequestParam(value = "page", required = false, defaultValue = "1") Integer page, HttpServletRequest req, Authentication authentication) {
     // 세션정보
     System.out.println("authentication = " + authentication);
 
