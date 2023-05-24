@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.MessageSource;
 import org.springframework.data.domain.Page;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -33,6 +34,7 @@ public class TestController {
   private final TestService testService;
   private final FileComponent fileComponent;
   private final ExcelComponent excelComponent;
+  private final MessageSource ms;
 
   // 리스트
   @GetMapping(value = {"/", "test/list"})
@@ -94,7 +96,7 @@ public class TestController {
     Integer testIdx = testService.saveTest(testDto);
 
     if(testIdx == null){
-      model.addAttribute("message", "오류가 발생하였습니다.");
+      model.addAttribute("message", ms.getMessage("error1",null,null));
       model.addAttribute("href", "back");
       return "message";
     }
@@ -189,7 +191,7 @@ public class TestController {
     }else {
       // 엑셀 업로드
       ArrayList<List<String>> excelData = excelComponent.uploadExcel(excelFile);
-
+      System.out.println("excelData = " + excelData);
       if(excelData == null){
         model.addAttribute("message", "엑셀 파일을 확인해주세요. xls, xlsx 형식만 업로드 가능합니다.");
         model.addAttribute("href", "back");
