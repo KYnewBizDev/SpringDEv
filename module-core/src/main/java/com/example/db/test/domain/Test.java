@@ -22,7 +22,7 @@ public class Test {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(nullable = false)
   @Comment("고유값")
-  private Integer testIdx;
+  private Long testIdx;
   @Column(length = 100)
   @Comment("test 명")
   private String testName;
@@ -48,12 +48,12 @@ public class Test {
   @Comment("등록일")
   private LocalDateTime registerDate;
   @Comment("작성자 PK")
-  private Integer registerIdx;
+  private Long registerIdx;
   @LastModifiedDate
   @Comment("수정일")
   private LocalDateTime modifyDate;
   @Comment("수정자 PK")
-  private Integer modifyIdx;
+  private Long modifyIdx;
   @Column(length = 1, insertable = false)
   @ColumnDefault("'N'")
   @Comment("삭제여부")
@@ -61,7 +61,7 @@ public class Test {
 
   // 생성자
   @Builder
-  public Test(Integer testIdx, String testName, String testPwd, String memo, String originalFileName, String fileName, String isOpen, LocalDateTime registerDate, Integer registerIdx, LocalDateTime modifyDate, Integer modifyIdx, String isDelete) {
+  public Test(Long testIdx, String testName, String testPwd, String memo, String originalFileName, String fileName, String isOpen, LocalDateTime registerDate, Long registerIdx, LocalDateTime modifyDate, Long modifyIdx, String isDelete) {
     this.testIdx = testIdx;
     this.testName = testName;
     this.testPwd = testPwd;

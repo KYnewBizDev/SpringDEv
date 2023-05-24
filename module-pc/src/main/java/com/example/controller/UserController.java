@@ -38,7 +38,7 @@ public class UserController {
 
   // 뷰
   @GetMapping("user/detail/{id}")
-  public String detail(@PathVariable("id") Integer id, Model model) {
+  public String detail(@PathVariable("id") Long id, Model model) {
     UserDto row = userService.getUser(id);
     model.addAttribute("row", row);
 
@@ -73,15 +73,15 @@ public class UserController {
 //    userDto.setId(userSaveDto.getId());
 //    userDto.setPwd(encPwd);
 //    userDto.setRole(userSaveDto.getRole());
-//    userDto.setRegisterIdx((Integer) authentication.getPrincipal()); // 로그인 PK
-//    userDto.setModifyIdx((Integer) authentication.getPrincipal()); // 로그인 PK
-//    Integer userIdx = userService.saveUser(userDto);
+//    userDto.setRegisterIdx((Long) authentication.getPrincipal()); // 로그인 PK
+//    userDto.setModifyIdx((Long) authentication.getPrincipal()); // 로그인 PK
+//    Long userIdx = userService.saveUser(userDto);
 
 //    수정 후
     String encPwd = passwordEncoding.encode(userSaveDto.getPwd()); // 비밀번호 암호화
-    UserDto userDto = UserDto.builder().pwd(encPwd).registerIdx((Integer) authentication.getPrincipal()).build();
+    UserDto userDto = UserDto.builder().pwd(encPwd).registerIdx((Long) authentication.getPrincipal()).build();
     BeanUtils.copyProperties(userSaveDto, userDto,"pwd","registerIdx");
-    Integer userIdx = userService.saveUser(userDto);
+    Long userIdx = userService.saveUser(userDto);
 
     if(userIdx == null){
       model.addAttribute("message", "오류가 발생하였습니다.");
@@ -95,7 +95,7 @@ public class UserController {
 
   // 수정 폼
   @GetMapping("user/edit/{id}")
-  public String editForm(@PathVariable("id") Integer id, Model model) {
+  public String editForm(@PathVariable("id") Long id, Model model) {
     UserDto row = userService.getUser(id);
     model.addAttribute("row", row);
 
@@ -110,7 +110,7 @@ public class UserController {
 
   // 수정
   @PostMapping("user/edit/{id}")
-  public String editUser(@RequestParam("userIdx") Integer id, @Validated @ModelAttribute("row") UserEditDto userEditDto, BindingResult bindingResult, RedirectAttributes redirectAttributes, Model model, Authentication authentication) {
+  public String editUser(@RequestParam("userIdx") Long id, @Validated @ModelAttribute("row") UserEditDto userEditDto, BindingResult bindingResult, RedirectAttributes redirectAttributes, Model model, Authentication authentication) {
 
     if (bindingResult.hasErrors()) return "/user/edit"; // 검증실패시 return
 
@@ -124,8 +124,8 @@ public class UserController {
     userDtoUpdate.setName(userEditDto.getName());
     userDtoUpdate.setPwd(encPwd);
     userDtoUpdate.setRole(userEditDto.getRole());
-    userDtoUpdate.setModifyIdx((Integer) authentication.getPrincipal()); // 로그인 PK
-    Integer userIdx = userService.saveUser(userDtoUpdate);
+    userDtoUpdate.setModifyIdx((Long) authentication.getPrincipal()); // 로그인 PK
+    Long userIdx = userService.saveUser(userDtoUpdate);
 
     if(userIdx == null){
       model.addAttribute("message", "오류가 발생하였습니다.");
@@ -139,11 +139,11 @@ public class UserController {
 
   // 삭제
   @GetMapping("user/delete/{id}")
-  public String delUser(@PathVariable("id") Integer id, UserDto userDto, Authentication authentication) {
+  public String delUser(@PathVariable("id") Long id, UserDto userDto, Authentication authentication) {
     UserDto userDtoUpdate = userService.getUser(id); // 기존정보
     if(userDtoUpdate != null) {
       userDtoUpdate.setIsDelete("Y");
-      userDtoUpdate.setModifyIdx((Integer) authentication.getPrincipal()); // 로그인 PK
+      userDtoUpdate.setModifyIdx((Long) authentication.getPrincipal()); // 로그인 PK
       userService.saveUser(userDtoUpdate);
     }
     return "redirect:/user/list";

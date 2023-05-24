@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface TestRepository extends JpaRepository<Test, Integer> {
+public interface TestRepository extends JpaRepository<Test, Long> {
   // 뷰
-  Optional<Test> findByTestIdxAndIsDelete(Integer testIdx, String isDelete);
+  Optional<Test> findByTestIdxAndIsDelete(Long testIdx, String isDelete);
 }

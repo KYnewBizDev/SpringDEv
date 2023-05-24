@@ -7,6 +7,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface AuthRepository extends JpaRepository<Auth, Integer> {
+public interface AuthRepository extends JpaRepository<Auth, Long> {
   List<Auth> findAllByIsDelete(String isDelete);
 }

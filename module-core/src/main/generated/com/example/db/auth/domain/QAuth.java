@@ -19,7 +19,7 @@ public class QAuth extends EntityPathBase<Auth> {
 
     public static final QAuth auth = new QAuth("auth");
 
-    public final NumberPath<Integer> authIdx = createNumber("authIdx", Integer.class);
+    public final NumberPath<Long> authIdx = createNumber("authIdx", Long.class);
 
     public final StringPath authority = createString("authority");
 
@@ -27,11 +27,11 @@ public class QAuth extends EntityPathBase<Auth> {
 
     public final DateTimePath<java.time.LocalDateTime> modifyDate = createDateTime("modifyDate", java.time.LocalDateTime.class);
 
-    public final NumberPath<Integer> modifyIdx = createNumber("modifyIdx", Integer.class);
+    public final NumberPath<Long> modifyIdx = createNumber("modifyIdx", Long.class);
 
     public final DateTimePath<java.time.LocalDateTime> registerDate = createDateTime("registerDate", java.time.LocalDateTime.class);
 
-    public final NumberPath<Integer> registerIdx = createNumber("registerIdx", Integer.class);
+    public final NumberPath<Long> registerIdx = createNumber("registerIdx", Long.class);
 
     public final StringPath role = createString("role");
 

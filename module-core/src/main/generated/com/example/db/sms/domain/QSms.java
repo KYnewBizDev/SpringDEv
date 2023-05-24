@@ -31,9 +31,9 @@ public class QSms extends EntityPathBase<Sms> {
 
     public final DateTimePath<java.time.LocalDateTime> registerDate = createDateTime("registerDate", java.time.LocalDateTime.class);
 
-    public final NumberPath<Integer> registerIdx = createNumber("registerIdx", Integer.class);
+    public final NumberPath<Long> registerIdx = createNumber("registerIdx", Long.class);
 
-    public final NumberPath<Integer> testIdx = createNumber("testIdx", Integer.class);
+    public final NumberPath<Long> testIdx = createNumber("testIdx", Long.class);
 
     public final StringPath testName = createString("testName");
 

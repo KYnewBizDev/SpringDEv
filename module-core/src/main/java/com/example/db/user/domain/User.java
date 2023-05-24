@@ -22,7 +22,7 @@ public class User {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(nullable = false)
   @Comment("고유값")
-  private Integer userIdx;
+  private Long userIdx;
   @Column(length = 100)
   @Comment("이름")
   private String name;
@@ -41,12 +41,12 @@ public class User {
   @Comment("등록일")
   private LocalDateTime registerDate;
   @Comment("작성자 PK")
-  private Integer registerIdx;
+  private Long registerIdx;
   @LastModifiedDate
   @Comment("수정일")
   private LocalDateTime modifyDate;
   @Comment("수정자 PK")
-  private Integer modifyIdx;
+  private Long modifyIdx;
   @Column(length = 1, insertable = false)
   @ColumnDefault("'N'")
   @Comment("삭제여부")
@@ -54,7 +54,7 @@ public class User {
 
   // 생성자
   @Builder
-  public User(Integer userIdx, String name, String id, String role, String pwd, LocalDateTime registerDate, Integer registerIdx, LocalDateTime modifyDate, Integer modifyIdx, String isDelete) {
+  public User(Long userIdx, String name, String id, String role, String pwd, LocalDateTime registerDate, Long registerIdx, LocalDateTime modifyDate, Long modifyIdx, String isDelete) {
     this.userIdx = userIdx;
     this.name = name;
     this.id = id;

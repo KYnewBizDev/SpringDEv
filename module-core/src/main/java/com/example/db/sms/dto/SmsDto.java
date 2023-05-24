@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 public class SmsDto {
-  private Integer testIdx;
+  private Long testIdx;
   private String testName;
   private String testPwd;
   private String memo;
@@ -20,11 +20,11 @@ public class SmsDto {
   private String fileName;
   private String isOpen;
   private LocalDateTime registerDate;
-  private Integer registerIdx;
+  private Long registerIdx;
   private String isDelete;
 
   @Builder
-  public SmsDto(Integer testIdx, String testName, String testPwd, String memo, String originalFileName, String fileName, String isOpen, LocalDateTime registerDate, Integer registerIdx, String isDelete) {
+  public SmsDto(Long testIdx, String testName, String testPwd, String memo, String originalFileName, String fileName, String isOpen, LocalDateTime registerDate, Long registerIdx, String isDelete) {
     this.testIdx = testIdx;
     this.testName = testName;
     this.testPwd = testPwd;

@@ -37,7 +37,7 @@ public class TestService {
 
   // 뷰
   @Transactional(readOnly = true)
-  public TestDto getTest(Integer id) {
+  public TestDto getTest(Long id) {
     Optional<Test> test = testRepository.findByTestIdxAndIsDelete(id, "N");
 
     TestDto testDto = null;
@@ -62,7 +62,7 @@ public class TestService {
 
   // insert, update
   @Transactional
-  public Integer saveTest(TestDto testDto) {
+  public Long saveTest(TestDto testDto) {
     return testRepository.save(testDto.toEntity()).getTestIdx();
   }
 

@@ -12,17 +12,17 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 public class AuthDto {
-  private Integer authIdx;
+  private Long authIdx;
   private String role;
   private String authority;
   private LocalDateTime registerDate;
-  private Integer registerIdx;
+  private Long registerIdx;
   private LocalDateTime modifyDate;
-  private Integer modifyIdx;
+  private Long modifyIdx;
   private String isDelete;
 
   @Builder
-  public AuthDto(Integer authIdx, String role, String authority, LocalDateTime registerDate, Integer registerIdx, LocalDateTime modifyDate, Integer modifyIdx, String isDelete) {
+  public AuthDto(Long authIdx, String role, String authority, LocalDateTime registerDate, Long registerIdx, LocalDateTime modifyDate, Long modifyIdx, String isDelete) {
     this.authIdx = authIdx;
     this.role = role;
     this.authority = authority;

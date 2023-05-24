@@ -29,15 +29,15 @@ public class QTest extends EntityPathBase<Test> {
 
     public final DateTimePath<java.time.LocalDateTime> modifyDate = createDateTime("modifyDate", java.time.LocalDateTime.class);
 
-    public final NumberPath<Integer> modifyIdx = createNumber("modifyIdx", Integer.class);
+    public final NumberPath<Long> modifyIdx = createNumber("modifyIdx", Long.class);
 
     public final StringPath originalFileName = createString("originalFileName");
 
     public final DateTimePath<java.time.LocalDateTime> registerDate = createDateTime("registerDate", java.time.LocalDateTime.class);
 
-    public final NumberPath<Integer> registerIdx = createNumber("registerIdx", Integer.class);
+    public final NumberPath<Long> registerIdx = createNumber("registerIdx", Long.class);
 
-    public final NumberPath<Integer> testIdx = createNumber("testIdx", Integer.class);
+    public final NumberPath<Long> testIdx = createNumber("testIdx", Long.class);
 
     public final StringPath testName = createString("testName");
 

@@ -53,7 +53,7 @@ public class UserService {
 
   // 뷰
   @Transactional(readOnly = true)
-  public UserDto getUser(Integer id) {
+  public UserDto getUser(Long id) {
     Optional<User> user = userRepository.findByUserIdxAndIsDelete(id, "N");
 
     UserDto userDto = null;
@@ -76,7 +76,7 @@ public class UserService {
 
   // insert, update
   @Transactional
-  public Integer saveUser(UserDto userDto) {
+  public Long saveUser(UserDto userDto) {
     return userRepository.save(userDto.toEntity()).getUserIdx();
   }
 }

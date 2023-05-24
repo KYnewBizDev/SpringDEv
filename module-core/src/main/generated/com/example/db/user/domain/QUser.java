@@ -25,7 +25,7 @@ public class QUser extends EntityPathBase<User> {
 
     public final DateTimePath<java.time.LocalDateTime> modifyDate = createDateTime("modifyDate", java.time.LocalDateTime.class);
 
-    public final NumberPath<Integer> modifyIdx = createNumber("modifyIdx", Integer.class);
+    public final NumberPath<Long> modifyIdx = createNumber("modifyIdx", Long.class);
 
     public final StringPath name = createString("name");
 
@@ -33,11 +33,11 @@ public class QUser extends EntityPathBase<User> {
 
     public final DateTimePath<java.time.LocalDateTime> registerDate = createDateTime("registerDate", java.time.LocalDateTime.class);
 
-    public final NumberPath<Integer> registerIdx = createNumber("registerIdx", Integer.class);
+    public final NumberPath<Long> registerIdx = createNumber("registerIdx", Long.class);
 
     public final StringPath role = createString("role");
 
-    public final NumberPath<Integer> userIdx = createNumber("userIdx", Integer.class);
+    public final NumberPath<Long> userIdx = createNumber("userIdx", Long.class);
 
     public QUser(String variable) {
         super(User.class, forVariable(variable));

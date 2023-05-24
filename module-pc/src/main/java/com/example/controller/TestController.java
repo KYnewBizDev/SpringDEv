@@ -50,7 +50,7 @@ public class TestController {
 
   // 뷰
   @GetMapping("test/detail/{id}")
-  public String detail(@PathVariable("id") Integer id, Model model, Authentication authentication, HttpSession httpSession) {
+  public String detail(@PathVariable("id") Long id, Model model, Authentication authentication, HttpSession httpSession) {
     // 세션정보
     System.out.println("loginDto = " + httpSession.getAttribute("LOGIN"));
 //    LoginDto loginDto = (LoginDto) httpSession.getAttribute("LOGIN");
@@ -91,9 +91,9 @@ public class TestController {
     }
 
     testDto.setIsOpen((testDto.getIsOpen()==null)?"N":testDto.getIsOpen());
-    testDto.setRegisterIdx((Integer) authentication.getPrincipal()); // 로그인 PK
-    testDto.setModifyIdx((Integer) authentication.getPrincipal()); // 로그인 PK
-    Integer testIdx = testService.saveTest(testDto);
+    testDto.setRegisterIdx((Long) authentication.getPrincipal()); // 로그인 PK
+    testDto.setModifyIdx((Long) authentication.getPrincipal()); // 로그인 PK
+    Long testIdx = testService.saveTest(testDto);
 
     if(testIdx == null){
       model.addAttribute("message", ms.getMessage("error1",null,null));
@@ -107,7 +107,7 @@ public class TestController {
 
   // 수정 폼
   @GetMapping("test/edit/{id}")
-  public String editForm(@PathVariable("id") Integer id, Model model) {
+  public String editForm(@PathVariable("id") Long id, Model model) {
     TestDto row = testService.getTest(id);
     model.addAttribute("row", row);
 
@@ -122,7 +122,7 @@ public class TestController {
 
   // 수정
   @PostMapping("test/edit/{id}")
-  public String editTest(@RequestParam("testIdx") Integer id, @RequestParam("file") MultipartFile file, TestDto testDto, RedirectAttributes redirectAttributes, Model model, Authentication authentication) throws IOException {
+  public String editTest(@RequestParam("testIdx") Long id, @RequestParam("file") MultipartFile file, TestDto testDto, RedirectAttributes redirectAttributes, Model model, Authentication authentication) throws IOException {
     TestDto testDtoUpdate = testService.getTest(id); // 기존정보
     if(testDtoUpdate == null){
       model.addAttribute("message", "오류가 발생하였습니다.");
@@ -145,8 +145,8 @@ public class TestController {
     testDtoUpdate.setTestName(testDto.getTestName());
     testDtoUpdate.setMemo(testDto.getMemo());
     testDtoUpdate.setIsOpen((testDto.getIsOpen()==null)?"N":testDto.getIsOpen());
-    testDtoUpdate.setModifyIdx((Integer) authentication.getPrincipal()); // 로그인 PK
-    Integer testIdx = testService.saveTest(testDtoUpdate);
+    testDtoUpdate.setModifyIdx((Long) authentication.getPrincipal()); // 로그인 PK
+    Long testIdx = testService.saveTest(testDtoUpdate);
 
     if(testIdx == null){
       model.addAttribute("message", "오류가 발생하였습니다.");
@@ -160,7 +160,7 @@ public class TestController {
 
   // 삭제
   @GetMapping("test/delete/{id}")
-  public String delTest(@PathVariable("id") Integer id, TestDto testDto, Authentication authentication) {
+  public String delTest(@PathVariable("id") Long id, TestDto testDto, Authentication authentication) {
     TestDto testDtoUpdate = testService.getTest(id); // 기존정보
     if(testDtoUpdate != null) {
       // 기존 파일 삭제
@@ -169,7 +169,7 @@ public class TestController {
       }
 
       testDtoUpdate.setIsDelete("Y");
-      testDtoUpdate.setModifyIdx((Integer) authentication.getPrincipal()); // 로그인 PK
+      testDtoUpdate.setModifyIdx((Long) authentication.getPrincipal()); // 로그인 PK
       testService.saveTest(testDtoUpdate);
     }
     return "redirect:/test/list";
@@ -201,9 +201,9 @@ public class TestController {
         for (List<String> excel : excelData) {
           testDto.setTestName(excel.get(0));
           testDto.setIsOpen(excel.get(1));
-          testDto.setRegisterIdx((Integer) authentication.getPrincipal()); // 로그인 PK
-          testDto.setModifyIdx((Integer) authentication.getPrincipal()); // 로그인 PK
-          Integer testIdx = testService.saveTest(testDto);
+          testDto.setRegisterIdx((Long) authentication.getPrincipal()); // 로그인 PK
+          testDto.setModifyIdx((Long) authentication.getPrincipal()); // 로그인 PK
+          Long testIdx = testService.saveTest(testDto);
         }
       }
     }

@@ -9,7 +9,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class UserEditDto {
-  private Integer userIdx;
+  private Long userIdx;
   private String id;
   @NotBlank
   private String name;

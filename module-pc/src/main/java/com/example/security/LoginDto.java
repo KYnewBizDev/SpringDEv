@@ -9,13 +9,13 @@ import java.io.Serializable;
 @NoArgsConstructor
 @Getter
 public class LoginDto implements Serializable {
-  private Integer idx;
+  private Long idx;
   private String id;
   private String name;
   private String role;
 
   @Builder
-  public LoginDto(Integer idx, String id, String name, String  role) {
+  public LoginDto(Long idx, String id, String name, String  role) {
     this.idx = idx;
     this.id = id;
     this.name = name;

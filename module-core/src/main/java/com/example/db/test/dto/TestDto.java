@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 public class TestDto {
-  private Integer testIdx;
+  private Long testIdx;
   private String testName;
   private String testPwd;
   private String memo;
@@ -17,13 +17,13 @@ public class TestDto {
   private String fileName;
   private String isOpen;
   private LocalDateTime registerDate;
-  private Integer registerIdx;
+  private Long registerIdx;
   private LocalDateTime modifyDate;
-  private Integer modifyIdx;
+  private Long modifyIdx;
   private String isDelete;
 
   @Builder
-  public TestDto(Integer testIdx, String testName, String testPwd, String memo, String originalFileName, String fileName, String isOpen, LocalDateTime registerDate, Integer registerIdx, LocalDateTime modifyDate, Integer modifyIdx, String isDelete) {
+  public TestDto(Long testIdx, String testName, String testPwd, String memo, String originalFileName, String fileName, String isOpen, LocalDateTime registerDate, Long registerIdx, LocalDateTime modifyDate, Long modifyIdx, String isDelete) {
     this.testIdx = testIdx;
     this.testName = testName;
     this.testPwd = testPwd;

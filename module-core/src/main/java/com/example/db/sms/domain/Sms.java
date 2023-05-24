@@ -21,7 +21,7 @@ public class Sms {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(nullable = false)
   @Comment("고유값")
-  private Integer testIdx;
+  private Long testIdx;
   @Column(length = 100)
   @Comment("test 명")
   private String testName;
@@ -47,7 +47,7 @@ public class Sms {
   @Comment("등록일")
   private LocalDateTime registerDate;
   @Comment("작성자 PK")
-  private Integer registerIdx;
+  private Long registerIdx;
   @Column(length = 1, insertable = false)
   @ColumnDefault("'N'")
   @Comment("삭제여부")
@@ -55,7 +55,7 @@ public class Sms {
 
   // 생성자
   @Builder
-  public Sms(Integer testIdx, String testName, String testPwd, String memo, String originalFileName, String fileName, String isOpen, LocalDateTime registerDate, Integer registerIdx, String isDelete) {
+  public Sms(Long testIdx, String testName, String testPwd, String memo, String originalFileName, String fileName, String isOpen, LocalDateTime registerDate, Long registerIdx, String isDelete) {
     this.testIdx = testIdx;
     this.testName = testName;
     this.testPwd = testPwd;

@@ -22,7 +22,7 @@ public class Auth {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(nullable = false)
   @Comment("고유값")
-  private Integer authIdx;
+  private Long authIdx;
   @Column(length = 100)
   @Comment("권한")
   private String role;
@@ -35,12 +35,12 @@ public class Auth {
   @Comment("등록일")
   private LocalDateTime registerDate;
   @Comment("작성자 PK")
-  private Integer registerIdx;
+  private Long registerIdx;
   @LastModifiedDate
   @Comment("수정일")
   private LocalDateTime modifyDate;
   @Comment("수정자 PK")
-  private Integer modifyIdx;
+  private Long modifyIdx;
   @Column(length = 1, insertable = false)
   @ColumnDefault("'N'")
   @Comment("삭제여부")
@@ -48,7 +48,7 @@ public class Auth {
 
   // 생성자
   @Builder
-  public Auth(Integer authIdx, String role, String authority, LocalDateTime registerDate, Integer registerIdx, LocalDateTime modifyDate, Integer modifyIdx, String isDelete) {
+  public Auth(Long authIdx, String role, String authority, LocalDateTime registerDate, Long registerIdx, LocalDateTime modifyDate, Long modifyIdx, String isDelete) {
     this.authIdx = authIdx;
     this.role = role;
     this.authority = authority;

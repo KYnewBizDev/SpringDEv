@@ -12,19 +12,19 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 public class UserDto {
-  private Integer userIdx;
+  private Long userIdx;
   private String name;
   private String id;
   private String pwd;
   private String role;
   private LocalDateTime registerDate;
-  private Integer registerIdx;
+  private Long registerIdx;
   private LocalDateTime modifyDate;
-  private Integer modifyIdx;
+  private Long modifyIdx;
   private String isDelete;
 
   @Builder
-  public UserDto(Integer userIdx, String name, String id, String pwd, String role, LocalDateTime registerDate, Integer registerIdx, LocalDateTime modifyDate, Integer modifyIdx, String isDelete) {
+  public UserDto(Long userIdx, String name, String id, String pwd, String role, LocalDateTime registerDate, Long registerIdx, LocalDateTime modifyDate, Long modifyIdx, String isDelete) {
     this.userIdx = userIdx;
     this.name = name;
     this.id = id;
