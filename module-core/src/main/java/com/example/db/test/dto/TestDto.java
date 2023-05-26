@@ -1,6 +1,13 @@
 package com.example.db.test.dto;
 
 import com.example.db.test.domain.Test;
+import com.example.excel.annotation.DefaultBodyStyle;
+import com.example.excel.annotation.DefaultHeaderStyle;
+import com.example.excel.annotation.ExcelColumn;
+import com.example.excel.annotation.ExcelColumnStyle;
+import com.example.excel.style.DefaultExcelCellStyle;
+import com.example.excel.style.custom.BlueBodyStyle;
+import com.example.excel.style.custom.PinkHeaderStyle;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -8,18 +15,29 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Getter
 @Setter
+@DefaultHeaderStyle(
+        style = @ExcelColumnStyle(excelCellStyleClass = DefaultExcelCellStyle.class, enumName = "BLUE_HEADER")
+)
+@DefaultBodyStyle(
+        style = @ExcelColumnStyle(excelCellStyleClass = DefaultExcelCellStyle.class, enumName = "BODY")
+)
 public class TestDto {
+  @ExcelColumn(headerName = "id", headerStyle = @ExcelColumnStyle(excelCellStyleClass = PinkHeaderStyle.class), bodyStyle = @ExcelColumnStyle(excelCellStyleClass = BlueBodyStyle.class))
   private Long testIdx;
+  @ExcelColumn(headerName = "testName")
   private String testName;
   private String testPwd;
   private String memo;
+  @ExcelColumn(headerName = "originalFileName")
   private String originalFileName;
   private String fileName;
+  @ExcelColumn(headerName = "isOpen")
   private String isOpen;
   private LocalDateTime registerDate;
   private Long registerIdx;
   private LocalDateTime modifyDate;
   private Long modifyIdx;
+  @ExcelColumn(headerName = "isDelete")
   private String isDelete;
 
   @Builder
@@ -53,5 +71,23 @@ public class TestDto {
         .modifyIdx(modifyIdx)
         .isDelete(isDelete)
         .build();
+  }
+
+  @Override
+  public String toString() {
+    return "TestDto{" +
+            "testIdx=" + testIdx +
+            ", testName='" + testName + '\'' +
+            ", testPwd='" + testPwd + '\'' +
+            ", memo='" + memo + '\'' +
+            ", originalFileName='" + originalFileName + '\'' +
+            ", fileName='" + fileName + '\'' +
+            ", isOpen='" + isOpen + '\'' +
+            ", registerDate=" + registerDate +
+            ", registerIdx=" + registerIdx +
+            ", modifyDate=" + modifyDate +
+            ", modifyIdx=" + modifyIdx +
+            ", isDelete='" + isDelete + '\'' +
+            '}';
   }
 }

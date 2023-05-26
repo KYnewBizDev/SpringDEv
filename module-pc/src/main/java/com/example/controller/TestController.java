@@ -28,6 +28,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import static com.example.utils.ExcelUtil.*;
+
 @Controller
 @RequiredArgsConstructor
 public class TestController {
@@ -181,7 +183,7 @@ public class TestController {
     return "test/excelUpload";
   }
 
-  @PostMapping("test/excelUpload")
+ /* @PostMapping("test/excelUpload")
   public String excelUpload(@RequestParam("excelFile") MultipartFile excelFile, TestDto testDto, Model model, Authentication authentication) {
 
     if(excelFile.isEmpty()){
@@ -209,10 +211,45 @@ public class TestController {
     }
 
     return "redirect:/test/list";
+  }*/
+
+  @PostMapping("test/excelUpload")
+  public String excelUpload(@RequestParam("excelFile") MultipartFile excelFile, TestDto testDto, Model model, Authentication authentication) throws IOException {
+
+    if(excelFile.isEmpty()){
+      model.addAttribute("message", "오류가 발생하였습니다.");
+      model.addAttribute("href", "back");
+      return "message";
+    }else {
+      // 엑셀 업로드
+      ArrayList<List<String>> excelData = excelComponent.uploadExcel(excelFile);
+      System.out.println("excelData = " + excelData);
+      if(excelData == null){
+        model.addAttribute("message", "엑셀 파일을 확인해주세요. xls, xlsx 형식만 업로드 가능합니다.");
+        model.addAttribute("href", "back");
+        return "message";
+
+      }else{
+       /* for (List<String> excel : excelData) {
+          testDto.setTestName(excel.get(0));
+          testDto.setIsOpen(excel.get(1));
+          testDto.setRegisterIdx((Long) authentication.getPrincipal()); // 로그인 PK
+          testDto.setModifyIdx((Long) authentication.getPrincipal()); // 로그인 PK
+          Long testIdx = testService.saveTest(testDto);
+        }*/
+        List<Map<String, Object>> maps = readExcel(excelFile);
+        List<TestDto> testDtos = convertToVOList(maps, TestDto.class);
+        for (TestDto dto : testDtos) {
+          Long testIdx = testService.saveTest(dto);
+        }
+      }
+    }
+
+    return "redirect:/test/list";
   }
 
   // 엑셀 다운로드
-  @GetMapping("test/excel")
+  /*@GetMapping("test/excel")
   public void excel(HttpServletRequest req, HttpServletResponse response) throws IOException {
     List<TestDto> list = testService.getExcel(req.getParameter("searchType"), req.getParameter("searchWord"));
 
@@ -243,5 +280,10 @@ public class TestController {
 
     // 엑셀 다운로드
     excelComponent.downloadExcel(fileName, header, body, response);
+  }*/
+  @GetMapping("test/excel")
+  public void excel(HttpServletRequest req, HttpServletResponse response) throws Exception {
+    List<TestDto> list = testService.getExcel(req.getParameter("searchType"), req.getParameter("searchWord"));
+    multiSheetExcelFile(list, TestDto.class, response, "test");
   }
 }
