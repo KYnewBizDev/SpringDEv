@@ -135,19 +135,15 @@ public class ExcelUtil {
                         if (field.getName().equals(dataFieldName)) {
                             cell = row.createCell(colNum);
                             field.setAccessible(true);
-                            System.out.println("dataList.get(i).toString() = " + dataList.get(i).toString());
                             if(field.get(dataList.get(j))!=null) {
-                                System.out.println("field.get(dataList.get(j)).toString() = " + field.get(dataList.get(j)).toString());
                                 cell.setCellValue(field.get(dataList.get(j)).toString());
                             } else {
-                                System.out.println("aaaaaa");
                                 cell.setCellValue("");
                             }
                             cell.setCellStyle(resource.getCellStyle(dataFieldName,ExcelRenderLocation.BODY));
                             colNum++;
                         }
                     }
-
                 }
             }
             start = total;
@@ -217,7 +213,7 @@ public class ExcelUtil {
         return fields;
     }
 
-    //클래스의 부모 애노테이션까지 다 가져옴
+    //클래스의 부모 애노테이션까지 다 가져와서 해당 targetAnnotation 있는지 확안
     private static Annotation getAnnotation(Class<?> clazz,
                                            Class<? extends Annotation> targetAnnotation) {
         for (Class<?> clazzInClasses : getAllClassesIncludingSuperClasses(clazz)) {
@@ -285,12 +281,43 @@ public class ExcelUtil {
     }
 
     //상위에 선언된 애노테이션 보다 하위 애노테이션을 적용하기 위한 메소드
-    private static ExcelColumnStyle decideAppliedStyleAnnotation(ExcelColumnStyle classAnnotation,
-                                                                 ExcelColumnStyle fieldAnnotation) {
+    private static ExcelColumnStyle decideAppliedStyleAnnotation(ExcelColumnStyle classAnnotation, ExcelColumnStyle fieldAnnotation) {
         if (fieldAnnotation.excelCellStyleClass().equals(NoExcelCellStyle.class) && classAnnotation != null) {
             return classAnnotation;
         }
         return fieldAnnotation;
+    }
+
+    /**
+     * entity를 R타입으로 반환
+     * @param entity
+     * @param claz
+     * @return
+     * @param <T>
+     * @param <R>
+     * @throws IllegalAccessException
+     * @throws InstantiationException
+     */
+    public static <T, R> R mapEntityToDTO(T entity, Class<R> claz) throws IllegalAccessException, InstantiationException {
+        R dto = claz.newInstance();
+
+        Class<? extends Object> entityClass = entity.getClass();
+
+        for (Field entityField : entityClass.getDeclaredFields()) {
+            entityField.setAccessible(true);
+
+            Field dtoField;
+            try {
+                dtoField = claz.getDeclaredField(entityField.getName());
+            } catch (NoSuchFieldException e) {
+                continue; // Skip fields that don't exist in the DTO
+            }
+
+            dtoField.setAccessible(true);
+            dtoField.set(dto, entityField.get(entity));
+        }
+
+        return dto;
     }
 
 }

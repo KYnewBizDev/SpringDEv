@@ -21,7 +21,7 @@ public class PreCalculatedCellStyleMap {
 	//ex) 원화 나 날짜 기타 등등
 	public void put(Class<?> fieldType, ExcelCellKey excelCellKey, ExcelCellStyle excelCellStyle, Workbook wb) {
 		CellStyle cellStyle = wb.createCellStyle();
-		excelCellStyle.apply(cellStyle);
+		excelCellStyle.apply(cellStyle, wb);
 		cellStyleMap.put(excelCellKey, cellStyle);
 	}
 

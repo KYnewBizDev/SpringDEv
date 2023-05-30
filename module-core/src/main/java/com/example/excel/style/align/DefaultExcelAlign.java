@@ -61,12 +61,4 @@ public enum DefaultExcelAlign implements ExcelAlign {
 		cellStyle.setVerticalAlignment(verticalAlignment);
 	}
 
-	public HorizontalAlignment getHorizontalAlignment() {
-		return horizontalAlignment;
-	}
-
-	public VerticalAlignment getVerticalAlignment() {
-		return verticalAlignment;
-	}
-
 }

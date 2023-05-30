@@ -4,7 +4,9 @@ import com.example.db.test.domain.Test;
 import com.example.db.test.dto.TestDto;
 import com.example.db.test.repository.TestQueryRepository;
 import com.example.db.test.repository.TestRepository;
+import com.fasterxml.jackson.databind.util.BeanUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -14,6 +16,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import static com.example.utils.ExcelUtil.mapEntityToDTO;
 
 @Service
 @RequiredArgsConstructor
@@ -69,19 +73,27 @@ public class TestService {
 
   // 엑셀 다운로드
   @Transactional(readOnly = true)
-  public List<TestDto> getExcel(String searchType, String searchWord) {
+  public List<TestDto> getExcel(String searchType, String searchWord) throws IllegalAccessException, InstantiationException {
     List<Test> testList = testQueryRepository.findAllTest(searchType, searchWord);
     List<TestDto> testDtoList = new ArrayList<>();
 
-    for (Test test : testList) {
+   /* for (Test test : testList) {
       TestDto testDto = TestDto.builder()
           .testIdx(test.getTestIdx())
           .testName(test.getTestName())
           .isOpen(test.getIsOpen())
           .originalFileName(test.getOriginalFileName())
+              .isDelete(test.getIsDelete())
           .registerDate(test.getRegisterDate())
           .build();
       testDtoList.add(testDto);
+    }*/
+
+    for (Test test : testList) {
+//        testDtoList.add(mapEntityToDTO(test, TestDto.class));
+        TestDto dto = new TestDto();
+        BeanUtils.copyProperties(test,dto,"pwd");
+        testDtoList.add(dto);
     }
     return testDtoList;
   }
