@@ -15,8 +15,8 @@
       <div>
         <select name="searchType" id="searchType">
           <option value="">전체</option>
-          <option value="testName" th:selected="${param.searchType == 'testName'}">이름</option>
-          <option value="originalFileName" th:selected="${param.searchType == 'originalFileName'}">첨부파일명</option>
+          <option value="testName" th:selected="${#strings.equals(param.searchType,'testName')}">이름</option>
+          <option value="originalFileName" th:selected="${#strings.equals(param.searchType,'originalFileName')}">첨부파일명</option>
         </select>
         <input type="text" name="searchWord" id="searchWord" th:value="${param.searchWord}" placeholder="검색">
         <button type="submit">검색</button>

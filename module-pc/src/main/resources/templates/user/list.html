@@ -15,8 +15,8 @@
       <div>
         <select name="searchType" id="searchType">
           <option value="">전체</option>
-          <option value="id" th:selected="${param.searchType == 'id'}">ID</option>
-          <option value="name" th:selected="${param.searchType == 'name'}">이름</option>
+          <option value="id" th:selected="${#strings.equals(param.searchType,'id')}">ID</option>
+          <option value="name" th:selected="${#strings.equals(param.searchType,'name')}">이름</option>
         </select>
         <input type="text" name="searchWord" id="searchWord" th:value="${param.searchWord}" placeholder="검색">
         <button type="submit">검색</button>
