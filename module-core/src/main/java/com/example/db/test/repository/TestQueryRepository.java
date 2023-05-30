@@ -3,7 +3,7 @@ package com.example.db.test.repository;
 import com.example.db.test.domain.Test;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import jakarta.persistence.EntityManager;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -15,11 +15,9 @@ import java.util.List;
 import static com.example.db.test.domain.QTest.test;
 
 @Repository
+@RequiredArgsConstructor
 public class TestQueryRepository {
   private final JPAQueryFactory query;
-  public TestQueryRepository(EntityManager em) {
-    this.query = new JPAQueryFactory(em);
-  }
 
   // 리스트
   public Page<Test> findLimit(Pageable pageable, String searchType, String searchWord) {

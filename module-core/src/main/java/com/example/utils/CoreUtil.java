@@ -232,7 +232,7 @@ public class CoreUtil {
      * @param iMinute 쿠키저장시간
      *****************************************************/
     public static void setCookieObject(HttpServletResponse response, String name, String value, int iMinute)
-            throws java.io.UnsupportedEncodingException {
+            throws UnsupportedEncodingException {
         // Cookie 객체
         Cookie cookie = new Cookie(name, URLEncoder.encode(value, "euc-kr"));
 

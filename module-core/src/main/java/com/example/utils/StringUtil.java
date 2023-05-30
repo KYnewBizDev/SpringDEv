@@ -18,7 +18,7 @@ public class StringUtil {
     }
 
     /*****************************************************
-     * 날짜 형식 변환 (20190822 => 2019.08.22)
+     * 날짜 형식 변환 (20230101 => 22023.01.01)
      *
      * @param value 날짜 데이타
      * @return String 반환 된 문자
@@ -61,7 +61,7 @@ public class StringUtil {
     }
 
     /*****************************************************
-     * 날짜 형식 변환 (2019.08.22 => 20190822)
+     * 날짜 형식 변환 (2023.01.01 => 20230101)
      *
      * @param value 날짜 데이타
      * @return String 반환 된 문자
@@ -580,7 +580,7 @@ public class StringUtil {
      * @param oldsub 변경시킬 문자열
      * @param newsub 변경할 문자열
      * @return String 변경된 문자열
-     * @see java.lang.String#replaceAll(String, String)
+     * @see String#replaceAll(String, String)
      */
     public static String replace(Object obj, String oldsub, String newsub) {
         if ((obj == null) || (oldsub == null) || (newsub == null)) {
@@ -596,7 +596,7 @@ public class StringUtil {
      * @param oldsub 변경시킬 문자열
      * @param newsub 변경할 문자열
      * @return String 변경된 문자열
-     * @see java.lang.String#replaceAll(String, String)
+     * @see String#replaceAll(String, String)
      */
     public static String replace(String str, String oldsub, String newsub) {
         if ((str == null) || (oldsub == null) || (newsub == null)) {

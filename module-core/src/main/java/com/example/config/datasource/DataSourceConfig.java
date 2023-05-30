@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import javax.sql.DataSource;
 import java.util.HashMap;
 
+// DB 연결
 @Configuration
 @EnableTransactionManagement
 public class DataSourceConfig {
