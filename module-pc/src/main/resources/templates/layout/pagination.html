@@ -8,8 +8,8 @@
     , start = ${T(java.lang.Math).floor((page - 1) / pageSize) * pageSize + 1}
     , endTemp = ${(start + pageSize - 1) < totalPages ? (start + pageSize - 1) : totalPages}
     , end = ${endTemp <= 0 ? 1 : endTemp}
-    , prev = ${(start>1) ? start-1 : start}
-    , next = ${(totalPages>end) ? end+1 : end}
+    , prev = ${(page>1) ? page-1 : page}
+    , next = ${page+1 >= totalPages ? totalPages : page+1}
   ">
     <li><button class="btn_arrow first" th:onclick="|movePage(1)|"></button></li>
     <li><button class="btn_arrow prev" th:onclick="|movePage(${prev})|"></button></li>
