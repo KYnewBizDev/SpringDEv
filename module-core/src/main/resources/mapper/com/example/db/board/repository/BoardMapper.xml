@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.db.board.repository.BoardMapper">
+
+  <select id="findLimit" resultType="Board">
+    select * from ${search.table}
+    <include refid="likeSearch"/>
+    order by board_idx desc
+
+    <if test="pageable.paged">
+      limit #{pageable.offset}, #{pageable.pageSize}
+    </if>
+  </select>
+
+  <select id="findLimitCount" resultType="long">
+    select count(*) from ${search.table}
+    <include refid="likeSearch"/>
+  </select>
+
+  <sql id="likeSearch">
+    <where>
+      is_delete = #{search.isDelete}
+
+      <if test="search.searchWord != null and search.searchWord != ''">
+        <if test="search.searchType != null and search.searchType != ''">
+          <if test="search.searchType eq 'titleContent'">
+            and (title like CONCAT('%',#{search.searchWord},'%') or content like CONCAT('%',#{search.searchWord},'%'))
+          </if>
+          <if test="search.searchType eq 'title'">
+            and title like CONCAT('%',#{search.searchWord},'%')
+          </if>
+          <if test="search.searchType eq 'content'">
+            and content like CONCAT('%',#{search.searchWord},'%')
+          </if>
+        </if>
+        <if test="search.searchType == null or search.searchType == ''">
+          and (title like CONCAT('%',#{search.searchWord},'%') or content like CONCAT('%',#{search.searchWord},'%'))
+        </if>
+      </if>
+
+      <if test="search.startDate != null and search.startDate != '' and search.endDate != null and search.endDate != ''">
+        and date_format(register_date, '%Y-%m-%d') between #{search.startDate} and #{search.endDate}
+      </if>
+      <if test="search.startDate != null and search.startDate != '' and (search.endDate == null or search.endDate == '')">
+        and date_format(register_date, '%Y-%m-%d') <![CDATA[>=]]> #{search.startDate}
+      </if>
+      <if test="(search.startDate == null or search.startDate == '') and search.endDate != null and search.endDate != ''">
+        and date_format(register_date, '%Y-%m-%d') <![CDATA[<=]]> #{search.endDate}
+      </if>
+
+      <if test="search.isOpen != null and search.isOpen != ''">
+        and is_open = #{search.isOpen}
+      </if>
+      <if test="search.category1 != null and search.category1 != ''">
+        and category1 = #{search.category1}
+      </if>
+      <if test="search.category2 != null and search.category2 != ''">
+        and category2 = #{search.category2}
+      </if>
+    </where>
+  </sql>
+
+  <select id="findByBoardId" resultType="Board">
+    select * from ${table} where is_delete = #{isDelete} and board_idx = #{boardIdx}
+  </select>
+
+  <insert id="addBoard" parameterType="BoardDto" useGeneratedKeys="true" keyProperty="boardDto.boardIdx">
+    insert into ${table} (board_group_idx, board_comment_idx, parent_idx, title, content, is_top, top_date, is_open, hit, category1, category2, is_reply, voc, sort, is_hot, is_new, start_date, end_date, is_alltime, link1, link2, link1_target, link2_target, register_idx, modify_idx)
+    values (#{boardDto.boardGroupIdx}, #{boardDto.boardCommentIdx}, #{boardDto.parentIdx}, #{boardDto.title}, #{boardDto.content}, #{boardDto.isTop}, #{boardDto.topDate}, #{boardDto.isOpen}, #{boardDto.hit}, #{boardDto.category1}, #{boardDto.category2}, #{boardDto.isReply}, #{boardDto.voc}, #{boardDto.sort}, #{boardDto.isHot}, #{boardDto.isNew}, #{boardDto.startDate}, #{boardDto.endDate}, #{boardDto.isAlltime}, #{boardDto.link1}, #{boardDto.link2}, #{boardDto.link1Target}, #{boardDto.link2Target}, #{boardDto.registerIdx}, #{boardDto.modifyIdx})
+  </insert>
+
+  <update id="editBoard" parameterType="BoardDto" keyProperty="boardDto.boardIdx">
+    update ${table} set
+    board_group_idx = #{boardDto.boardGroupIdx}
+    , board_comment_idx = #{boardDto.boardCommentIdx}
+    , parent_idx = #{boardDto.parentIdx}
+    , title = #{boardDto.title}
+    , content = #{boardDto.content}
+    , is_top = #{boardDto.isTop}
+    , top_date = #{boardDto.topDate}
+    , is_open = #{boardDto.isOpen}
+    , hit = #{boardDto.hit}
+    , category1 = #{boardDto.category1}
+    , category2 = #{boardDto.category2}
+    , is_reply = #{boardDto.isReply}
+    , voc = #{boardDto.voc}
+    , sort = #{boardDto.sort}
+    , is_hot = #{boardDto.isHot}
+    , is_new = #{boardDto.isNew}
+    , start_date = #{boardDto.startDate}
+    , end_date = #{boardDto.endDate}
+    , is_alltime = #{boardDto.isAlltime}
+    , link1 = #{boardDto.link1}
+    , link2 = #{boardDto.link2}
+    , link1_target = #{boardDto.link1Target}
+    , link2_target = #{boardDto.link2Target}
+    , modify_idx = #{boardDto.modifyIdx}
+    where board_idx = #{boardDto.boardIdx}
+  </update>
+
+  <update id="deleteBoard" parameterType="BoardDto" keyProperty="boardDto.boardIdx">
+    update ${table} set
+      modify_idx = #{boardDto.modifyIdx}
+      , is_delete = #{boardDto.isDelete}
+    where board_idx = #{boardDto.boardIdx}
+  </update>
+</mapper>

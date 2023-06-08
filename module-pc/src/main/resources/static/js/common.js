@@ -98,3 +98,36 @@ function EditorUploadImage(file, editor) {
     }
   });
 }
+
+// 날짜검색
+function setDate(title, start, end){
+  var now = new Date();
+  $("#"+end).val(now.getFullYear() +"-"+ ("0"+(now.getMonth()+1)).slice(-2) +"-"+ ("0"+now.getDate()).slice(-2));
+
+  if(title=='당월'){
+    $("#"+start).val(now.getFullYear() +"-"+ ("0"+(now.getMonth()+1)).slice(-2) +"-01");
+  }
+  else if(title=='오늘'){
+    $("#"+start).val(now.getFullYear() +"-"+ ("0"+(now.getMonth()+1)).slice(-2) +"-"+ ("0"+now.getDate()).slice(-2));
+  }
+  else if(title=='1주일'){
+    var oneWeekAgo = new Date(now.setDate(now.getDate() - 7));	// 1주일 전
+    $("#"+start).val(oneWeekAgo.getFullYear() +"-"+ ("0"+(oneWeekAgo.getMonth()+1)).slice(-2) +"-"+ ("0"+oneWeekAgo.getDate()).slice(-2));
+  }
+  else if(title=='1개월'){
+    var oneMonthAgo = new Date(now.setMonth(now.getMonth() - 1));	// 1개월 전
+    $("#"+start).val(oneMonthAgo.getFullYear() +"-"+ ("0"+(oneMonthAgo.getMonth()+1)).slice(-2) +"-"+ ("0"+oneMonthAgo.getDate()).slice(-2));
+  }
+  else if(title=='3개월'){
+    var threeMonthAgo = new Date(now.setMonth(now.getMonth() - 3));	// 3개월 전
+    $("#"+start).val(threeMonthAgo.getFullYear() +"-"+ ("0"+(threeMonthAgo.getMonth()+1)).slice(-2) +"-"+ ("0"+threeMonthAgo.getDate()).slice(-2));
+  }
+  else if(title=='6개월'){
+    var sixMonthAgo = new Date(now.setMonth(now.getMonth() - 6));	// 6개월 전
+    $("#"+start).val(sixMonthAgo.getFullYear() +"-"+ ("0"+(sixMonthAgo.getMonth()+1)).slice(-2) +"-"+ ("0"+sixMonthAgo.getDate()).slice(-2));
+  }
+  else if(title=='1년'){
+    var oneYearAgo = new Date(now.setFullYear(now.getFullYear() - 1));	// 일년 전
+    $("#"+start).val(oneYearAgo.getFullYear() +"-"+ ("0"+(oneYearAgo.getMonth()+1)).slice(-2) +"-"+ ("0"+oneYearAgo.getDate()).slice(-2));
+  }
+}

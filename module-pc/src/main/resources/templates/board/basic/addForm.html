@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout/default_layout :: template(~{::css}, ~{::js}, ~{::content})}">
+<th:block th:fragment="css">
+  <link type="text/css" rel="stylesheet" href="/css/board.css">
+</th:block>
+<th:block th:fragment="js"></th:block>
+<th:block th:fragment="content">
+
+
+  <H3>수정 폼</H3>
+
+  <form method="post" th:object="${row}" enctype="multipart/form-data">
+    <table class="view">
+      <tr>
+        <th>제목</th>
+        <td><input type="text" th:field="*{title}" placeholder="제목"></td>
+      </tr>
+      <tr>
+        <th>상단고정</th>
+        <td>
+          <input type="checkbox" id="isTop" th:field="*{isTop}" value="Y">
+          <label for="isTop">고정</label>
+        </td>
+      </tr>
+      <tr>
+        <th>상단고정 종료일</th>
+        <td><input type="date" th:field="*{topDate}" placeholder="제목"></td>
+      </tr>
+      <tr>
+        <th>노출여부</th>
+        <td>
+          <input type="radio" id="isOpen1" th:field="*{isOpen}" value="Y">
+          <label for="isOpen1">노출</label>
+          <input type="radio" id="isOpen2" th:field="*{isOpen}" value="N">
+          <label for="isOpen2">미노출</label>
+        </td>
+      </tr>
+      <tr>
+        <th>내용</th>
+        <td><textarea th:field="*{content}"></textarea></td>
+      </tr>
+      <tr>
+        <th>첨부파일</th>
+        <td>
+          <input type="file" id="file" name="file" >
+        </td>
+      </tr>
+      <tr>
+        <th>등록자</th>
+        <td th:text="${row.registerIdx}"></td>
+      </tr>
+      <tr>
+        <th>등록일</th>
+        <td th:text="${#temporals.format(row.registerDate, 'yyyy-MM-dd HH:mm:ss')}"></td>
+      </tr>
+      <tr>
+        <th>수정자</th>
+        <td th:text="${row.modifyIdx}"></td>
+      </tr>
+      <tr>
+        <th>최종수정일</th>
+        <td th:text="${#temporals.format(row.modifyDate, 'yyyy-MM-dd HH:mm:ss')}"></td>
+      </tr>
+    </table>
+
+    <div class="bottom-btn">
+      <button type="submit">저장</button>
+      <button type="button" th:onclick="|location.href='@{/bbs/{table}/list (table=${table})}'|">목록</button>
+    </div>
+  </form>
+
+  <script type="text/javascript">
+    Editor('#memo'); // 에디터
+  </script>
+
+</th:block>
+</html>

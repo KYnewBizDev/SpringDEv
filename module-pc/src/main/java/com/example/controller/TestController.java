@@ -22,9 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -39,7 +37,7 @@ public class TestController {
   private final MessageSource ms;
 
   // 리스트
-  @GetMapping(value = {"/", "test/list"})
+  @GetMapping("test/list")
   public String list(Model model, @RequestParam(value = "page", required = false, defaultValue = "1") Integer page, HttpServletRequest req, Authentication authentication) {
     // 세션정보
     System.out.println("authentication = " + authentication);

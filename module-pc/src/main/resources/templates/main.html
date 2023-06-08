@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout/default_layout :: template(~{::css}, ~{::js}, ~{::content})}">
+<th:block th:fragment="css">
+  <link type="text/css" rel="stylesheet" href="/css/test.css">
+</th:block>
+<th:block th:fragment="js"></th:block>
+<th:block th:fragment="content">
+
+
+  <H3>메인</H3>
+  <a href="/bbs/test/list"><h1>게시판</h1></a>
+  <br><br>
+
+  <a href="/test/list">기존게시판</a><br>
+  <a href="/user/list">관리자관리</a><br><br>
+
+  <a href="/login" th:unless="${session.LOGIN}">로그인</a><br>
+  <a href="/logout" th:if="${session.LOGIN}">로그아웃</a><br>
+  <span th:if="${session.LOGIN}" th:text="|${session.LOGIN.name}님|"> 로그인계정이름 </span><br>
+
+
+</th:block>
+</html>

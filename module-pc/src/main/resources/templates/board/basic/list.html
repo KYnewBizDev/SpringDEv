@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout/default_layout :: template(~{::css}, ~{::js}, ~{::content})}">
+<th:block th:fragment="css">
+  <link type="text/css" rel="stylesheet" href="/css/board.css">
+</th:block>
+<th:block th:fragment="js"></th:block>
+<th:block th:fragment="content">
+
+
+  <H3>Basic 게시판</H3>
+
+  <!-- search -->
+  <div class="search-box">
+    <form method="get">
+      <div>
+        통합검색 :
+        <select name="searchType" id="searchType">
+          <option value="">전체</option>
+          <option value="titleContent" th:selected="${#strings.equals(param.searchType,'titleContent')}">제목+내용</option>
+          <option value="title" th:selected="${#strings.equals(param.searchType,'title')}">제목</option>
+          <option value="content" th:selected="${#strings.equals(param.searchType,'content')}">내용</option>
+          <option value="registerIdx" th:selected="${#strings.equals(param.searchType,'registerIdx')}">등록자</option>
+        </select>
+        <input type="text" name="searchWord" id="searchWord" th:value="${param.searchWord}" placeholder="검색">
+      </div>
+      <div>
+        등록일 : <input type="date" name="startDate" id="startDate" th:value="${param.startDate}"> ~ <input type="date" name="endDate" id="endDate" th:value="${param.endDate}">
+        <button type="button" onclick="setDate('당월', 'startDate', 'endDate');">당월</button>
+        <button type="button" onclick="setDate('오늘', 'startDate', 'endDate');">오늘</button>
+        <button type="button" onclick="setDate('1주일', 'startDate', 'endDate');">1주일</button>
+        <button type="button" onclick="setDate('1개월', 'startDate', 'endDate');">1개월</button>
+        <button type="button" onclick="setDate('3개월', 'startDate', 'endDate');">3개월</button>
+        <button type="button" onclick="setDate('6개월', 'startDate', 'endDate');">6개월</button>
+        <button type="button" onclick="setDate('1년', 'startDate', 'endDate');">1년</button>
+      </div>
+      <div>
+        조건 :
+        <select name="isOpen" id="isOpen">
+          <option value="">노출여부</option>
+          <option value="Y" th:selected="${#strings.equals(param.isOpen,'Y')}">노출</option>
+          <option value="N" th:selected="${#strings.equals(param.isOpen,'N')}">미노출</option>
+        </select>
+      </div>
+      페이지수:
+      <select name="perPage" id="perPage">
+        <option value="20" th:selected="${#strings.equals(param.perPage,'20')}">20</option>
+        <option value="50" th:selected="${#strings.equals(param.perPage,'50')}">50</option>
+        <option value="100" th:selected="${#strings.equals(param.perPage,'100')}">100</option>
+      </select>
+      <button type="submit">검색</button>
+      <button type="button" th:onclick="location.reload(0);">초기화</button>
+    </form>
+  </div>
+  <!-- // search -->
+
+  <div class="top-btn">
+    <button type="button" th:onclick="">상단고정/노출적용</button>
+    <button type="button" th:onclick="|location.href='@{/bbs/{table}/addForm (table=${table})}'|">등록</button>
+  </div>
+  <!-- list -->
+  <table class="list">
+    <tr>
+      <th>No</th>
+      <th>제목</th>
+      <th>등록자</th>
+      <th>등록일</th>
+      <th>상단고정</th>
+      <th>노출</th>
+      <th>조회수</th>
+      <th>수정</th>
+      <th>삭제</th>
+    </tr>
+    <tr th:each="row, loop : ${list}">
+      <td th:text="${list.getTotalElements - ((page-1) * list.size) - loop.index}">No</td>
+      <td th:text="${row.title}"></td>
+      <td th:text="${row.registerIdx}"></td>
+      <td th:text="${#temporals.format(row.registerDate, 'yyyy-MM-dd HH:mm:ss')}"></td>
+      <td><input type="checkbox" th:name="|isTop[${row.boardIdx}]|" th:id="|isTop[${row.boardIdx}]|" th:checked="${#strings.equals(row.isTop,'Y')}" value="Y"></td>
+      <td><input type="checkbox" th:name="|isOpen[${row.boardIdx}]|" th:id="|isOpen[${row.boardIdx}]|" th:checked="${#strings.equals(row.isOpen,'Y')}" value="Y"></td>
+      <td th:text="${row.hit}"></td>
+      <td><a href="#" th:href="@{/bbs/{table}/detail/{boardIdx} (table=${table}, boardIdx=${row.boardIdx})}">수정</a></td>
+      <td><button th:onclick="|btnDelete(${row.boardIdx});|">삭제</button></td>
+    </tr>
+  </table>
+  <!-- // list -->
+
+  <!-- list paging -->
+  <th:block th:replace="~{layout/pagination :: pageFragment(${page},${list.totalPages})}"></th:block>
+  <!-- // list paging -->
+
+  <script type="text/javascript">
+      // 삭제
+      function btnDelete(boardIdx){
+        if(confirm('작성한 게시물을 삭제하시겠습니까?')){
+          var params = {
+            table : '[[${table}]]'
+            , boardIdx : boardIdx
+          };
+
+          $.ajax({
+            url : "/bbs/[[${table}]]/delete",
+            type : "post",
+            data : params,
+            dataType: "json",
+            success : function(result) {
+              if (result.status == "0000") {
+                alert(result.msg);
+                location.href="/bbs/[[${table}]]/list";
+              }else{
+                alert(result.msg);
+              }
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+              alert("Ajax 오류");
+            }
+          });
+        }
+      }
+  </script>
+
+</th:block>
+</html>

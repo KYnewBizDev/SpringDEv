@@ -3,7 +3,6 @@ package com.example.controller;
 import com.example.Define;
 import com.example.common.MailComponent;
 import com.example.service.SmsService;
-import com.example.service.TestService;
 import com.example.db.sms.dto.SmsDto;
 import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -20,9 +19,14 @@ import java.util.Map;
 @Controller
 @RequiredArgsConstructor
 public class MainController {
-  private final TestService testService;
   private final SmsService smsService;
   private final MailComponent mailComponent;
+
+  // 메인
+  @GetMapping("/")
+  public String main() {
+    return "main";
+  }
 
   // 로그인
   @GetMapping("login")
