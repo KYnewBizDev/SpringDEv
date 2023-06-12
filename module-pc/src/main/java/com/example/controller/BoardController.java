@@ -4,6 +4,7 @@ import com.example.db.board.dto.BoardDto;
 import com.example.service.BoardService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -103,56 +104,6 @@ public class BoardController {
   //endregion basic
 
 
-  //region notice
-  // 리스트 (notice)
-  public String noticeList(String table, Model model, HttpServletRequest req) {
-    int page = (req.getParameter("page")!=null && !Objects.equals(req.getParameter("page"), ""))? Integer.parseInt((req.getParameter("page"))) : 1;
-    String perPage = (req.getParameter("perPage")!=null && !Objects.equals(req.getParameter("perPage"), ""))? (req.getParameter("perPage")) : "20";
-
-    Page<BoardDto> list = boardService.getBasicList(table,page-1, Integer.parseInt(perPage), req.getParameter("searchType"), req.getParameter("searchWord"), req.getParameter("startDate"), req.getParameter("endDate"), req.getParameter("isOpen"), req.getParameter("category1"), req.getParameter("category2"));
-
-    model.addAttribute("table", table);
-    model.addAttribute("list", list);
-    model.addAttribute("page", page);
-    return "board/notice/list";
-  }
-
-  // 뷰 (notice)
-  public String noticeDetail(String table, Long boardIdx, Model model) {
-    BoardDto row = boardService.getBoard(table, boardIdx);
-
-    if(row == null){
-      model.addAttribute("message", "잘못된 접근입니다.");
-      model.addAttribute("href", "back");
-      return "message";
-    }
-    model.addAttribute("table", table);
-    model.addAttribute("row", row);
-    return "board/notice/detail";
-  }
-
-  // 등록 폼 (notice)
-  public String noticeAddForm(String table, Model model) {
-    model.addAttribute("table", table);
-    model.addAttribute("row", new BoardDto());
-    return "board/notice/addForm";
-  }
-
-  // 수정 폼 (notice)
-  public String noticeEditForm(String table, Long boardIdx, Model model) {
-    BoardDto row = boardService.getBoard(table, boardIdx);
-
-    if(row == null){
-      model.addAttribute("message", "잘못된 접근입니다.");
-      model.addAttribute("href", "back");
-      return "message";
-    }
-    model.addAttribute("table", table);
-    model.addAttribute("row", row);
-    return "board/notice/editForm";
-  }
-  //endregion notice
-
   //endregion /** 스킨 **/
 
 
@@ -188,6 +139,7 @@ public class BoardController {
   @PostMapping("bbs/{table}/editForm/{id}")
   public String editBoard(@PathVariable("table") String table, @PathVariable("id") Long boardIdx, BoardDto boardDto, Model model, Authentication authentication, RedirectAttributes redirectAttributes) {
     BoardDto boardDtoUpdate = boardService.getBoard(table, boardIdx); // 기존정보
+    BeanUtils.copyProperties(boardDto,boardDtoUpdate);
 
     // 파일 업로드
 //    Map<String, String> attachFile = fileComponent.uploadFile(Define.FILE_DIR, file);
@@ -201,7 +153,6 @@ public class BoardController {
 //      boardDtoUpdate.setFileName(attachFile.get("fileName"));
 //    }
 
-    boardDtoUpdate.setTitle(boardDto.getTitle());
     boardDtoUpdate.setIsOpen((boardDto.getIsOpen()==null)?"N":boardDto.getIsOpen());
     if(authentication != null) boardDtoUpdate.setModifyIdx((Long) authentication.getPrincipal()); // 로그인 PK
     Long editIdx = boardService.editBoard(table, boardDtoUpdate);
@@ -223,19 +174,20 @@ public class BoardController {
   public HashMap<String, String> deleteBoard(@PathVariable("table") String table, @RequestParam(name = "boardIdx", required = false) Long boardIdx, Authentication authentication) {
     HashMap<String, String> rtn = new HashMap<>();
 
-    BoardDto boardDtoUpdate = boardService.getBoard(table, boardIdx); // 기존정보
-    if(boardDtoUpdate != null) {
+    BoardDto boardDto = boardService.getBoard(table, boardIdx); // 기존정보
+    // 본인 게시물만 삭제 등 조건 필요
+    if(boardDto != null) {
       // 코멘트 파일 삭제
       // 코멘트 하트 삭제
       // 코멘트 삭제
       // 파일 삭제
-//      if(boardDtoUpdate.getFileName() != null){
-//        fileComponent.removeFile(Define.FILE_DIR, boardDtoUpdate.getFileName());
+//      if(boardDto.getFileName() != null){
+//        fileComponent.removeFile(Define.FILE_DIR, boardDto.getFileName());
 //      }
 
-      boardDtoUpdate.setIsDelete("Y");
-      if(authentication != null) boardDtoUpdate.setModifyIdx((Long) authentication.getPrincipal()); // 로그인 PK
-      Long deleteIdx = boardService.deleteBoard(table, boardDtoUpdate);
+      boardDto.setIsDelete("Y");
+      if(authentication != null) boardDto.setModifyIdx((Long) authentication.getPrincipal()); // 로그인 PK
+      Long deleteIdx = boardService.deleteBoard(table, boardDto);
 
       if(deleteIdx == 0){
         rtn.put("status", "0001");
