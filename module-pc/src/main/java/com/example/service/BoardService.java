@@ -13,6 +13,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class BoardService {
@@ -36,10 +38,10 @@ public class BoardService {
   // 뷰
   @Transactional(readOnly = true)
   public BoardDto getBoard(String table, Long boardIdx) {
-    Board board = boardMyBatisRepository.findByBoardId(table, boardIdx, "N");
+    Optional<Board> board = boardMyBatisRepository.findByBoardId(table, boardIdx, "N");
 
     BoardDto boardDto = new BoardDto();
-    BeanUtils.copyProperties(board,boardDto);
+    board.ifPresent(value -> BeanUtils.copyProperties(value, boardDto));
     return boardDto;
   }
 

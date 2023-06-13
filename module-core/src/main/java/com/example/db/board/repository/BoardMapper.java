@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
+import java.util.Optional;
 
 @Mapper
 public interface BoardMapper {
@@ -15,7 +16,8 @@ public interface BoardMapper {
     Long findLimitCount(@Param("search") BoardSearchDto search);
 
     // 뷰
-    Board findByBoardId(@Param("table") String table, @Param("boardIdx") Long boardIdx, @Param("isDelete") String isDelete);
+    Optional<Board>
+    findByBoardId(@Param("table") String table, @Param("boardIdx") Long boardIdx, @Param("isDelete") String isDelete);
 
     // 등록
     void addBoard(@Param("table") String table, @Param("boardDto") BoardDto boardDto);

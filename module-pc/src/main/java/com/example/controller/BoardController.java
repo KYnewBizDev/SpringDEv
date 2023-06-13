@@ -1,24 +1,35 @@
 package com.example.controller;
 
+import com.example.Define;
+import com.example.common.FileComponent;
 import com.example.db.board.dto.BoardDto;
+import com.example.db.boardFile.dto.BoardFileDto;
+import com.example.service.BoardFileService;
 import com.example.service.BoardService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.BeanWrapper;
+import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.data.domain.Page;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.HashMap;
-import java.util.Objects;
+import java.io.IOException;
+import java.util.*;
+
+import static com.example.utils.BeanUtil.getNullPropertyNames;
 
 @Controller
 @RequiredArgsConstructor
 public class BoardController {
   private final BoardService boardService;
+  private final BoardFileService boardFileService;
+  private final FileComponent fileComponent;
 
   // 게시판
   @GetMapping({"bbs/{table}","bbs/{table}/{mode}","bbs/{table}/{mode}/{id}"})
@@ -70,14 +81,16 @@ public class BoardController {
   // 뷰 (basic)
   public String basicDetail(String table, Long boardIdx, Model model) {
     BoardDto row = boardService.getBoard(table, boardIdx);
+    List<BoardFileDto> files = boardFileService.getList(row.getBoardGroupIdx(), boardIdx);
 
-    if(row == null){
+    if(row.getBoardIdx() == null){
       model.addAttribute("message", "잘못된 접근입니다.");
       model.addAttribute("href", "back");
       return "message";
     }
     model.addAttribute("table", table);
     model.addAttribute("row", row);
+    model.addAttribute("files", files);
     return "board/basic/detail";
   }
 
@@ -92,7 +105,7 @@ public class BoardController {
   public String basicEditForm(String table, Long boardIdx, Model model) {
     BoardDto row = boardService.getBoard(table, boardIdx);
 
-    if(row == null){
+    if(row.getBoardIdx() == null){
       model.addAttribute("message", "잘못된 접근입니다.");
       model.addAttribute("href", "back");
       return "message";
@@ -109,14 +122,10 @@ public class BoardController {
 
   // 등록
   @PostMapping("bbs/{table}/addForm")
-  public String addBoard(@PathVariable("table") String table, BoardDto boardDto, Model model, Authentication authentication, RedirectAttributes redirectAttributes) {
-    // 파일 업로드
-//    Map<String, String> attachFile = fileComponent.uploadFile(Define.FILE_DIR, file);
-//    if(attachFile!=null){
-//      boardDto.setOriginalFileName(attachFile.get("originalFileName"));
-//      boardDto.setFileName(attachFile.get("fileName"));
-//    }
+  public String addBoard(@PathVariable("table") String table, BoardDto boardDto, @RequestParam("file[]") MultipartFile[] files, Model model, Authentication authentication, RedirectAttributes redirectAttributes) {
 
+    Long boardGroupIdx = 1L; // 게시판 그룹 저장
+    boardDto.setBoardGroupIdx(boardGroupIdx);
     boardDto.setIsOpen((boardDto.getIsOpen()==null)?"N":boardDto.getIsOpen());
     if(authentication != null) {
       boardDto.setRegisterIdx((Long) authentication.getPrincipal()); // 로그인 PK
@@ -124,7 +133,33 @@ public class BoardController {
     }
     Long addIdx = boardService.addBoard(table, boardDto);
 
-    if(addIdx == 0){
+    if(addIdx > 0) {
+      // 파일 업로드
+      Map<String, String> attachFile;
+      int i=0;
+      for (MultipartFile file : files) {
+        i++;
+        try {
+          attachFile = fileComponent.uploadFile(Define.FILE_DIR, file);
+          if (attachFile != null) {
+            BoardFileDto boardFileDto = new BoardFileDto();
+            boardFileDto.setBoardGroupIdx(boardGroupIdx);
+            boardFileDto.setBoardIdx(addIdx);
+            boardFileDto.setOriginalFileName(attachFile.get("originalFileName"));
+            boardFileDto.setFileName(attachFile.get("fileName"));
+            boardFileDto.setIsMobile("N");
+            boardFileDto.setSort(i);
+            if (authentication != null) {
+              boardFileDto.setRegisterIdx((Long) authentication.getPrincipal()); // 로그인 PK
+              boardFileDto.setModifyIdx((Long) authentication.getPrincipal()); // 로그인 PK
+            }
+            boardFileService.saveBoardFile(boardFileDto);
+          }
+        } catch (IOException e) {
+          throw new RuntimeException(e);
+        }
+      }
+    }else{
       model.addAttribute("message", "저장 오류가 발생하였습니다.");
       model.addAttribute("href", "back");
       return "message";
@@ -137,27 +172,51 @@ public class BoardController {
 
   // 수정
   @PostMapping("bbs/{table}/editForm/{id}")
-  public String editBoard(@PathVariable("table") String table, @PathVariable("id") Long boardIdx, BoardDto boardDto, Model model, Authentication authentication, RedirectAttributes redirectAttributes) {
+  public String editBoard(@PathVariable("table") String table, @PathVariable("id") Long boardIdx, BoardDto boardDto, @RequestParam("file[]") MultipartFile[] files, Model model, Authentication authentication, RedirectAttributes redirectAttributes) {
     BoardDto boardDtoUpdate = boardService.getBoard(table, boardIdx); // 기존정보
-    BeanUtils.copyProperties(boardDto,boardDtoUpdate);
-
-    // 파일 업로드
-//    Map<String, String> attachFile = fileComponent.uploadFile(Define.FILE_DIR, file);
-//    if(attachFile!=null){
-//      // 기존 파일 삭제
-//      if(boardDtoUpdate.getFileName() != null){
-//        fileComponent.removeFile(Define.FILE_DIR, boardDtoUpdate.getFileName());
-//      }
-//
-//      boardDtoUpdate.setOriginalFileName(attachFile.get("originalFileName"));
-//      boardDtoUpdate.setFileName(attachFile.get("fileName"));
-//    }
+    BeanUtils.copyProperties(boardDto, boardDtoUpdate, getNullPropertyNames(boardDto));
 
     boardDtoUpdate.setIsOpen((boardDto.getIsOpen()==null)?"N":boardDto.getIsOpen());
     if(authentication != null) boardDtoUpdate.setModifyIdx((Long) authentication.getPrincipal()); // 로그인 PK
     Long editIdx = boardService.editBoard(table, boardDtoUpdate);
 
-    if(editIdx == 0){
+    if(editIdx > 0) {
+      // 파일 업로드
+      Map<String, String> attachFile;
+      int i=0;
+      for (MultipartFile file : files) {
+        i++;
+        try {
+          attachFile = fileComponent.uploadFile(Define.FILE_DIR, file);
+          if (attachFile != null) {
+
+            // 기존 파일 삭제
+            BoardFileDto delDto = boardFileService.getBoardFile(boardDtoUpdate.getBoardGroupIdx(), editIdx, i);
+            if(delDto.getBoardFileIdx()!=null){
+              fileComponent.removeFile(Define.FILE_DIR, delDto.getFileName());
+              delDto.setIsDelete("Y");
+              if(authentication != null) delDto.setModifyIdx((Long) authentication.getPrincipal()); // 로그인 PK
+              boardFileService.saveBoardFile(delDto);
+            }
+
+            BoardFileDto boardFileDto = new BoardFileDto();
+            boardFileDto.setBoardGroupIdx(boardDto.getBoardGroupIdx());
+            boardFileDto.setBoardIdx(editIdx);
+            boardFileDto.setOriginalFileName(attachFile.get("originalFileName"));
+            boardFileDto.setFileName(attachFile.get("fileName"));
+            boardFileDto.setIsMobile("N");
+            boardFileDto.setSort(i);
+            if (authentication != null) {
+              boardFileDto.setRegisterIdx((Long) authentication.getPrincipal()); // 로그인 PK
+              boardFileDto.setModifyIdx((Long) authentication.getPrincipal()); // 로그인 PK
+            }
+            boardFileService.saveBoardFile(boardFileDto);
+          }
+        } catch (IOException e) {
+          throw new RuntimeException(e);
+        }
+      }
+    }else{
       model.addAttribute("message", "수정 오류가 발생하였습니다.");
       model.addAttribute("href", "back");
       return "message";
@@ -180,10 +239,15 @@ public class BoardController {
       // 코멘트 파일 삭제
       // 코멘트 하트 삭제
       // 코멘트 삭제
+
       // 파일 삭제
-//      if(boardDto.getFileName() != null){
-//        fileComponent.removeFile(Define.FILE_DIR, boardDto.getFileName());
-//      }
+      List<BoardFileDto> boardFileDtoList = boardFileService.getList(boardDto.getBoardGroupIdx(), boardIdx);
+      for (BoardFileDto boardFileDto : boardFileDtoList) {
+        fileComponent.removeFile(Define.FILE_DIR, boardFileDto.getFileName());
+        boardFileDto.setIsDelete("Y");
+        if(authentication != null) boardFileDto.setModifyIdx((Long) authentication.getPrincipal()); // 로그인 PK
+        boardFileService.saveBoardFile(boardFileDto);
+      }
 
       boardDto.setIsDelete("Y");
       if(authentication != null) boardDto.setModifyIdx((Long) authentication.getPrincipal()); // 로그인 PK
