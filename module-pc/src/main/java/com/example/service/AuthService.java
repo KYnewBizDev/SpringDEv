@@ -4,6 +4,7 @@ import com.example.db.auth.domain.Auth;
 import com.example.db.auth.dto.AuthDto;
 import com.example.db.auth.repository.AuthRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,11 +23,8 @@ public class AuthService {
 
     List<AuthDto> authDtoList = new ArrayList<>();
     for (Auth auth : authList) {
-      AuthDto authDto = AuthDto.builder()
-          .authIdx(auth.getAuthIdx())
-          .role(auth.getRole())
-          .authority(auth.getAuthority())
-          .build();
+      AuthDto authDto = new AuthDto();
+      BeanUtils.copyProperties(auth,authDto);
       authDtoList.add(authDto);
     }
     return authDtoList;

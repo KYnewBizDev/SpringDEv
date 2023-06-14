@@ -5,6 +5,7 @@ import com.example.db.user.dto.UserDto;
 import com.example.db.user.repository.UserQueryRepository;
 import com.example.db.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -24,16 +25,8 @@ public class UserService {
   public UserDto getUserId(String id) {
     Optional<User> user = userRepository.findByIdAndIsDelete(id, "N");
 
-    UserDto userDto = null;
-    if (user.isPresent()) {
-      userDto = UserDto.builder()
-          .userIdx(user.get().getUserIdx())
-          .name(user.get().getName())
-          .id(user.get().getId())
-          .pwd(user.get().getPwd())
-          .role(user.get().getRole())
-          .build();
-    }
+    UserDto userDto = new UserDto();
+    user.ifPresent(value -> BeanUtils.copyProperties(value, userDto));
     return userDto;
   }
 
@@ -42,13 +35,12 @@ public class UserService {
   public Page<UserDto> getList(int page, int perPage, String searchType, String searchWord) {
     Pageable pageable = PageRequest.of(page, perPage);
     Page<User> userList= userQueryRepository.findLimit(pageable, searchType, searchWord);
-    return userList.map(user-> UserDto.builder()
-        .userIdx(user.getUserIdx())
-        .name(user.getName())
-        .id(user.getId())
-        .role(user.getRole())
-        .registerDate(user.getRegisterDate())
-        .build());
+
+    return userList.map(user-> {
+      UserDto userDto = new UserDto();
+      BeanUtils.copyProperties(user, userDto);
+      return userDto;
+    });
   }
 
   // 뷰
@@ -56,21 +48,8 @@ public class UserService {
   public UserDto getUser(Long id) {
     Optional<User> user = userRepository.findByUserIdxAndIsDelete(id, "N");
 
-    UserDto userDto = null;
-    if (user.isPresent()) {
-      userDto = UserDto.builder()
-          .userIdx(user.get().getUserIdx())
-          .name(user.get().getName())
-          .id(user.get().getId())
-          .pwd(user.get().getPwd())
-          .role(user.get().getRole())
-          .registerDate(user.get().getRegisterDate())
-          .registerIdx(user.get().getRegisterIdx())
-          .modifyDate(user.get().getModifyDate())
-          .modifyIdx(user.get().getModifyIdx())
-          .isDelete(user.get().getIsDelete())
-          .build();
-    }
+    UserDto userDto = new UserDto();
+    user.ifPresent(value -> BeanUtils.copyProperties(value, userDto));
     return userDto;
   }
 
