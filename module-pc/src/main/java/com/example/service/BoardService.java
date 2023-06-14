@@ -1,10 +1,10 @@
 package com.example.service;
 
 
+import com.example.db.board.domain.Board;
 import com.example.db.board.dto.BoardDto;
 import com.example.db.board.dto.BoardSearchDto;
 import com.example.db.board.repository.*;
-import com.example.db.board.domain.Board;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
@@ -43,6 +43,12 @@ public class BoardService {
     BoardDto boardDto = new BoardDto();
     board.ifPresent(value -> BeanUtils.copyProperties(value, boardDto));
     return boardDto;
+  }
+
+  // 조회수
+  @Transactional
+  public void editHit(String table, Long boardIdx) {
+    boardMyBatisRepository.editHit(table, boardIdx);
   }
 
   // 등록

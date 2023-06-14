@@ -9,8 +9,6 @@ import com.example.service.BoardService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.BeanWrapper;
-import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.data.domain.Page;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -20,7 +18,10 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 import static com.example.utils.BeanUtil.getNullPropertyNames;
 
@@ -46,6 +47,7 @@ public class BoardController {
           return basicList(table, model, req);
         }
         case "detail" -> {
+          editHit(table, id);
           return basicDetail(table, id, model);
         }
         case "addForm" -> {
@@ -104,6 +106,7 @@ public class BoardController {
   // 수정 폼 (basic)
   public String basicEditForm(String table, Long boardIdx, Model model) {
     BoardDto row = boardService.getBoard(table, boardIdx);
+    List<BoardFileDto> files = boardFileService.getList(row.getBoardGroupIdx(), boardIdx);
 
     if(row.getBoardIdx() == null){
       model.addAttribute("message", "잘못된 접근입니다.");
@@ -112,6 +115,7 @@ public class BoardController {
     }
     model.addAttribute("table", table);
     model.addAttribute("row", row);
+    model.addAttribute("files", files);
     return "board/basic/editForm";
   }
   //endregion basic
@@ -119,6 +123,10 @@ public class BoardController {
 
   //endregion /** 스킨 **/
 
+  // 조회수
+  public void editHit(@PathVariable("table") String table, @PathVariable("id") Long boardIdx) {
+    boardService.editHit(table, boardIdx);
+  }
 
   // 등록
   @PostMapping("bbs/{table}/addForm")
@@ -126,7 +134,14 @@ public class BoardController {
 
     Long boardGroupIdx = 1L; // 게시판 그룹 저장
     boardDto.setBoardGroupIdx(boardGroupIdx);
+    boardDto.setHit(0);
+    boardDto.setSort(0);
+    boardDto.setIsTop((boardDto.getIsTop()==null)?"N":boardDto.getIsTop());
     boardDto.setIsOpen((boardDto.getIsOpen()==null)?"N":boardDto.getIsOpen());
+    boardDto.setIsReply((boardDto.getIsReply()==null)?"N":boardDto.getIsReply());
+    boardDto.setIsHot((boardDto.getIsHot()==null)?"N":boardDto.getIsHot());
+    boardDto.setIsNew((boardDto.getIsNew()==null)?"N":boardDto.getIsNew());
+    boardDto.setIsAlltime((boardDto.getIsAlltime()==null)?"N":boardDto.getIsAlltime());
     if(authentication != null) {
       boardDto.setRegisterIdx((Long) authentication.getPrincipal()); // 로그인 PK
       boardDto.setModifyIdx((Long) authentication.getPrincipal()); // 로그인 PK
@@ -176,7 +191,12 @@ public class BoardController {
     BoardDto boardDtoUpdate = boardService.getBoard(table, boardIdx); // 기존정보
     BeanUtils.copyProperties(boardDto, boardDtoUpdate, getNullPropertyNames(boardDto));
 
+    boardDtoUpdate.setIsTop((boardDto.getIsTop()==null)?"N":boardDto.getIsTop());
     boardDtoUpdate.setIsOpen((boardDto.getIsOpen()==null)?"N":boardDto.getIsOpen());
+    boardDtoUpdate.setIsReply((boardDto.getIsReply()==null)?"N":boardDto.getIsReply());
+    boardDtoUpdate.setIsHot((boardDto.getIsHot()==null)?"N":boardDto.getIsHot());
+    boardDtoUpdate.setIsNew((boardDto.getIsNew()==null)?"N":boardDto.getIsNew());
+    boardDtoUpdate.setIsAlltime((boardDto.getIsAlltime()==null)?"N":boardDto.getIsAlltime());
     if(authentication != null) boardDtoUpdate.setModifyIdx((Long) authentication.getPrincipal()); // 로그인 PK
     Long editIdx = boardService.editBoard(table, boardDtoUpdate);
 
@@ -200,7 +220,7 @@ public class BoardController {
             }
 
             BoardFileDto boardFileDto = new BoardFileDto();
-            boardFileDto.setBoardGroupIdx(boardDto.getBoardGroupIdx());
+            boardFileDto.setBoardGroupIdx(boardDtoUpdate.getBoardGroupIdx());
             boardFileDto.setBoardIdx(editIdx);
             boardFileDto.setOriginalFileName(attachFile.get("originalFileName"));
             boardFileDto.setFileName(attachFile.get("fileName"));
@@ -235,7 +255,7 @@ public class BoardController {
 
     BoardDto boardDto = boardService.getBoard(table, boardIdx); // 기존정보
     // 본인 게시물만 삭제 등 조건 필요
-    if(boardDto != null) {
+    if(boardDto.getBoardIdx() != null) {
       // 코멘트 파일 삭제
       // 코멘트 하트 삭제
       // 코멘트 삭제

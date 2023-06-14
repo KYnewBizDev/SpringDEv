@@ -30,6 +30,11 @@ public class BoardMyBatisRepository {
     return boardMapper.findByBoardId(table, boardIdx, isDelete);
   }
 
+  // 조회수
+  public void editHit(String table, Long boardIdx) {
+    boardMapper.editHit(table, boardIdx);
+  }
+
   // 등록
   public Long addBoard(String table, BoardDto boardDto) {
     boardMapper.addBoard(table, boardDto);

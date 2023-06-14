@@ -19,6 +19,9 @@ public interface BoardMapper {
     Optional<Board>
     findByBoardId(@Param("table") String table, @Param("boardIdx") Long boardIdx, @Param("isDelete") String isDelete);
 
+    // 조회수
+    void editHit(@Param("table") String table, @Param("boardIdx") Long boardIdx);
+
     // 등록
     void addBoard(@Param("table") String table, @Param("boardDto") BoardDto boardDto);
 

@@ -43,6 +43,11 @@
       <tr>
         <th>첨부파일</th>
         <td>
+          <div th:each="file : ${files}">
+            <a href="#" th:if="${file.fileName}" th:href="|/common/fileDown/${file.fileName}/${file.originalFileName}|" th:text="${file.originalFileName}"></a>
+            <br>
+            <img src="" th:if="${file.fileName}" th:src="|/common/imgDown/${file.fileName}|" width="300" height="300"/>
+          </div>
           <input type="file" id="file" name="file[]" >
           <input type="file" id="file1" name="file[]" >
         </td>
