@@ -29,21 +29,23 @@ public class Auth {
   @Column(length = 100)
   @Comment("메뉴별 권한")
   private String authority;
-  @CreatedDate
+
+  @Comment("등록일")
   @Column(updatable = false)
   @ColumnDefault("CURRENT_TIMESTAMP")
-  @Comment("등록일")
+  @CreatedDate
   private LocalDateTime registerDate;
   @Comment("작성자 PK")
   private Long registerIdx;
-  @LastModifiedDate
   @Comment("수정일")
+  @Column(columnDefinition="datetime(6) DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
+  @LastModifiedDate
   private LocalDateTime modifyDate;
   @Comment("수정자 PK")
   private Long modifyIdx;
+  @Comment("삭제여부")
   @Column(length = 1, insertable = false)
   @ColumnDefault("'N'")
-  @Comment("삭제여부")
   private String isDelete;
 
   // 생성자

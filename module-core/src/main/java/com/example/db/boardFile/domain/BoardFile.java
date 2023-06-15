@@ -38,16 +38,16 @@ public class BoardFile {
   @Comment("정렬")
   private Integer sort;
 
-  @CreatedDate
+  @Comment("등록일")
   @Column(updatable = false)
   @ColumnDefault("CURRENT_TIMESTAMP")
-  @Comment("등록일")
+  @CreatedDate
   private LocalDateTime registerDate;
   @Comment("작성자 PK")
   private Long registerIdx;
   @Comment("수정일")
+  @Column(columnDefinition="datetime(6) DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
   @LastModifiedDate
-  @ColumnDefault("CURRENT_TIMESTAMP")
   private LocalDateTime modifyDate;
   @Comment("수정자 PK")
   private Long modifyIdx;

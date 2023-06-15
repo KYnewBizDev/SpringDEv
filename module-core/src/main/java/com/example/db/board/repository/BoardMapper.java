@@ -30,4 +30,7 @@ public interface BoardMapper {
 
     // 삭제
     void deleteBoard(@Param("table") String table, @Param("boardDto") BoardDto boardDto);
+
+    // 상단고정/노출 적용
+    void editTopOpen(@Param("table") String table, @Param("boardDto") BoardDto boardDto);
 }

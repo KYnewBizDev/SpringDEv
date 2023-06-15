@@ -64,16 +64,67 @@
     select * from ${table} where is_delete = #{isDelete} and board_idx = #{boardIdx}
   </select>
 
+
   <update id="editHit">
     update ${table} set
       hit = ifnull(hit,0)+1
     where board_idx = #{boardIdx}
   </update>
 
-
   <insert id="addBoard" parameterType="BoardDto" useGeneratedKeys="true" keyProperty="boardDto.boardIdx">
-    insert into ${table} (board_group_idx, board_comment_idx, parent_idx, title, content, is_top, top_date, is_open, hit, category1, category2, is_reply, voc, sort, is_hot, is_new, start_date, end_date, is_alltime, link1, link2, link1_target, link2_target, register_idx, modify_idx)
-    values (#{boardDto.boardGroupIdx}, #{boardDto.boardCommentIdx}, #{boardDto.parentIdx}, #{boardDto.title}, #{boardDto.content}, #{boardDto.isTop}, #{boardDto.topDate}, #{boardDto.isOpen}, #{boardDto.hit}, #{boardDto.category1}, #{boardDto.category2}, #{boardDto.isReply}, #{boardDto.voc}, #{boardDto.sort}, #{boardDto.isHot}, #{boardDto.isNew}, #{boardDto.startDate}, #{boardDto.endDate}, #{boardDto.isAlltime}, #{boardDto.link1}, #{boardDto.link2}, #{boardDto.link1Target}, #{boardDto.link2Target}, #{boardDto.registerIdx}, #{boardDto.modifyIdx})
+    insert into ${table} (
+      board_group_idx
+      , board_comment_idx
+      , parent_idx
+      , title
+      , content
+      , is_top
+      , top_date
+      , is_open
+      , hit
+      , category1
+      , category2
+      , is_reply
+      , voc
+      , sort
+      , is_hot
+      , is_new
+      , start_date
+      , end_date
+      , is_alltime
+      , link1
+      , link2
+      , link1_target
+      , link2_target
+      , register_idx
+      , modify_idx
+    ) values (
+      #{boardDto.boardGroupIdx}
+      , #{boardDto.boardCommentIdx}
+      , #{boardDto.parentIdx}
+      , #{boardDto.title}
+      , #{boardDto.content}
+      , ifnull(#{boardDto.isTop}, 'N')
+      , #{boardDto.topDate}
+      , ifnull(#{boardDto.isOpen}, 'N')
+      , ifnull(#{boardDto.hit}, 0)
+      , #{boardDto.category1}
+      , #{boardDto.category2}
+      , ifnull(#{boardDto.isReply}, 'N')
+      , #{boardDto.voc}
+      , ifnull(#{boardDto.sort}, 0)
+      , ifnull(#{boardDto.isHot}, 'N')
+      , ifnull(#{boardDto.isNew}, 'N')
+      , #{boardDto.startDate}
+      , #{boardDto.endDate}
+      , ifnull(#{boardDto.isAlltime}, 'N')
+      , #{boardDto.link1}
+      , #{boardDto.link2}
+      , #{boardDto.link1Target}
+      , #{boardDto.link2Target}
+      , #{boardDto.registerIdx}
+      , #{boardDto.modifyIdx}
+    )
   </insert>
 
   <update id="editBoard" parameterType="BoardDto" keyProperty="boardDto.boardIdx">
@@ -83,34 +134,41 @@
       , parent_idx = #{boardDto.parentIdx}
       , title = #{boardDto.title}
       , content = #{boardDto.content}
-      , is_top = #{boardDto.isTop}
+      , is_top = ifnull(#{boardDto.isTop}, 'N')
       , top_date = #{boardDto.topDate}
-      , is_open = #{boardDto.isOpen}
-      , hit = #{boardDto.hit}
+      , is_open = ifnull(#{boardDto.isOpen}, 'N')
+      , hit = ifnull(#{boardDto.hit}, 0)
       , category1 = #{boardDto.category1}
       , category2 = #{boardDto.category2}
-      , is_reply = #{boardDto.isReply}
+      , is_reply = ifnull(#{boardDto.isReply}, 'N')
       , voc = #{boardDto.voc}
-      , sort = #{boardDto.sort}
-      , is_hot = #{boardDto.isHot}
-      , is_new = #{boardDto.isNew}
+      , sort = ifnull(#{boardDto.sort}, 0)
+      , is_hot = ifnull(#{boardDto.isHot}, 'N')
+      , is_new = ifnull(#{boardDto.isNew}, 'N')
       , start_date = #{boardDto.startDate}
       , end_date = #{boardDto.endDate}
-      , is_alltime = #{boardDto.isAlltime}
+      , is_alltime = ifnull(#{boardDto.isAlltime}, 'N')
       , link1 = #{boardDto.link1}
       , link2 = #{boardDto.link2}
       , link1_target = #{boardDto.link1Target}
       , link2_target = #{boardDto.link2Target}
       , modify_idx = #{boardDto.modifyIdx}
-      , modify_date = now()
     where board_idx = #{boardDto.boardIdx}
   </update>
 
   <update id="deleteBoard" parameterType="BoardDto" keyProperty="boardDto.boardIdx">
     update ${table} set
       modify_idx = #{boardDto.modifyIdx}
-      , is_delete = #{boardDto.isDelete}
-      , modify_date = now()
+      , is_delete = ifnull(#{boardDto.isDelete}, 'N')
     where board_idx = #{boardDto.boardIdx}
   </update>
+
+  <update id="editTopOpen" parameterType="BoardDto" keyProperty="boardDto.boardIdx">
+    update ${table} set
+      modify_idx = #{boardDto.modifyIdx}
+      , is_top = ifnull(#{boardDto.isTop}, 'N')
+      , is_open = ifnull(#{boardDto.isOpen}, 'N')
+    where board_idx = #{boardDto.boardIdx}
+  </update>
+
 </mapper>

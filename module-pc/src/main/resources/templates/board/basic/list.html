@@ -54,12 +54,13 @@
   <!-- // search -->
 
   <div class="top-btn">
-    <button type="button" th:onclick="">상단고정/노출적용</button>
+    <button type="button" th:onclick="setTopOpen();">상단고정/노출적용</button>
     <button type="button" th:onclick="|location.href='@{/bbs/{table}/addForm (table=${table})}'|">등록</button>
   </div>
   <!-- list -->
   <table class="list">
     <tr>
+      <th>선택</th>
       <th>No</th>
       <th>제목</th>
       <th>등록자</th>
@@ -71,6 +72,7 @@
       <th>삭제</th>
     </tr>
     <tr th:each="row, loop : ${list}">
+      <td><input type="checkbox" th:name="|idx[]|" th:id="|idx[${row.boardIdx}]|" th:value="${row.boardIdx}"></td>
       <td th:text="${list.getTotalElements - ((page-1) * list.size) - loop.index}">No</td>
       <td th:text="${row.title}"></td>
       <td th:text="${row.registerIdx}"></td>
@@ -89,16 +91,35 @@
   <!-- // list paging -->
 
   <script type="text/javascript">
-      // 삭제
-      function btnDelete(boardIdx){
-        if(confirm('작성한 게시물을 삭제하시겠습니까?')){
+    // 상단고정/노출 적용
+    function setTopOpen(){
+      if($('input:checkbox[name="idx[]"]:checked').length > 0){
+        if(confirm('선택한 게시물을 수정하시겠습니까?')){
+          var arrIdx = new Array();
+          var arrTop = new Array();
+          var arrOpen = new Array();
+          $('input:checkbox[name="idx[]"]:checked').each(function(e) {
+            arrIdx.push($(this).val());
+            if($('input[name="isTop['+$(this).val()+']"]').is(':checked')){
+              arrTop.push($('input[name="isTop['+$(this).val()+']"]').val());
+            }else{
+              arrTop.push('N');
+            }
+            if($('input[name="isOpen['+$(this).val()+']"]').is(':checked')){
+              arrOpen.push($('input[name="isOpen['+$(this).val()+']"]').val());
+            }else{
+              arrOpen.push('N');
+            }
+          });
           var params = {
             table : '[[${table}]]'
-            , boardIdx : boardIdx
+            , boardIdxs : arrIdx
+            , isTops : arrTop
+            , isOpens : arrOpen
           };
 
           $.ajax({
-            url : "/bbs/[[${table}]]/delete",
+            url : "/bbs/[[${table}]]/editTopOpen",
             type : "post",
             data : params,
             dataType: "json",
@@ -115,7 +136,38 @@
             }
           });
         }
+      }else{
+        alert("수정할 게시물을 선택해 주세요");
       }
+    }
+
+    // 삭제
+    function btnDelete(boardIdx){
+      if(confirm('작성한 게시물을 삭제하시겠습니까?')){
+        var params = {
+          table : '[[${table}]]'
+          , boardIdx : boardIdx
+        };
+
+        $.ajax({
+          url : "/bbs/[[${table}]]/delete",
+          type : "post",
+          data : params,
+          dataType: "json",
+          success : function(result) {
+            if (result.status == "0000") {
+              alert(result.msg);
+              location.href="/bbs/[[${table}]]/list";
+            }else{
+              alert(result.msg);
+            }
+          },
+          error: function (xhr, ajaxOptions, thrownError) {
+            alert("Ajax 오류");
+          }
+        });
+      }
+    }
   </script>
 
 </th:block>

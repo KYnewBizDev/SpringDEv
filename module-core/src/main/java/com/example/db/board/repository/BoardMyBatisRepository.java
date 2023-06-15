@@ -52,4 +52,10 @@ public class BoardMyBatisRepository {
     boardMapper.deleteBoard(table, boardDto);
     return boardDto.getBoardIdx();
   }
+
+  // 상단고정/노출 적용
+  public Long editTopOpen(String table, BoardDto boardDto) {
+    boardMapper.editTopOpen(table, boardDto);
+    return boardDto.getBoardIdx();
+  }
 }

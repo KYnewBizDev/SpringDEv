@@ -134,14 +134,6 @@ public class BoardController {
 
     Long boardGroupIdx = 1L; // 게시판 그룹 저장
     boardDto.setBoardGroupIdx(boardGroupIdx);
-    boardDto.setHit(0);
-    boardDto.setSort(0);
-    boardDto.setIsTop((boardDto.getIsTop()==null)?"N":boardDto.getIsTop());
-    boardDto.setIsOpen((boardDto.getIsOpen()==null)?"N":boardDto.getIsOpen());
-    boardDto.setIsReply((boardDto.getIsReply()==null)?"N":boardDto.getIsReply());
-    boardDto.setIsHot((boardDto.getIsHot()==null)?"N":boardDto.getIsHot());
-    boardDto.setIsNew((boardDto.getIsNew()==null)?"N":boardDto.getIsNew());
-    boardDto.setIsAlltime((boardDto.getIsAlltime()==null)?"N":boardDto.getIsAlltime());
     if(authentication != null) {
       boardDto.setRegisterIdx((Long) authentication.getPrincipal()); // 로그인 PK
       boardDto.setModifyIdx((Long) authentication.getPrincipal()); // 로그인 PK
@@ -191,12 +183,7 @@ public class BoardController {
     BoardDto boardDtoUpdate = boardService.getBoard(table, boardIdx); // 기존정보
     BeanUtils.copyProperties(boardDto, boardDtoUpdate, getNullPropertyNames(boardDto));
 
-    boardDtoUpdate.setIsTop((boardDto.getIsTop()==null)?"N":boardDto.getIsTop());
-    boardDtoUpdate.setIsOpen((boardDto.getIsOpen()==null)?"N":boardDto.getIsOpen());
-    boardDtoUpdate.setIsReply((boardDto.getIsReply()==null)?"N":boardDto.getIsReply());
-    boardDtoUpdate.setIsHot((boardDto.getIsHot()==null)?"N":boardDto.getIsHot());
-    boardDtoUpdate.setIsNew((boardDto.getIsNew()==null)?"N":boardDto.getIsNew());
-    boardDtoUpdate.setIsAlltime((boardDto.getIsAlltime()==null)?"N":boardDto.getIsAlltime());
+    // 본인 게시물만 수정 등 조건 필요
     if(authentication != null) boardDtoUpdate.setModifyIdx((Long) authentication.getPrincipal()); // 로그인 PK
     Long editIdx = boardService.editBoard(table, boardDtoUpdate);
 
@@ -283,6 +270,34 @@ public class BoardController {
     }else{
       rtn.put("status", "0002");
       rtn.put("msg", "삭제 오류가 발생하였습니다.");
+    }
+    return rtn;
+  }
+
+  // 상단고정/노출 적용
+  @PostMapping("bbs/{table}/editTopOpen")
+  @ResponseBody
+  public HashMap<String, String> editTopOpen(@PathVariable("table") String table, @RequestParam("boardIdxs[]") List<Long> boardIdxs, @RequestParam("isTops[]") List<String> isTops, @RequestParam("isOpens[]") List<String> isOpens, Authentication authentication) {
+    HashMap<String, String> rtn = new HashMap<>();
+
+    int i = 0;
+    Long editIdx = 0L;
+    for (Long boardIdx : boardIdxs) {
+      BoardDto boardDto = new BoardDto();
+      boardDto.setBoardIdx(boardIdx);
+      boardDto.setIsTop(isTops.get(i));
+      boardDto.setIsOpen(isOpens.get(i));
+      if (authentication != null) boardDto.setModifyIdx((Long) authentication.getPrincipal()); // 로그인 PK
+      editIdx = boardService.editTopOpen(table, boardDto);
+      i++;
+    }
+
+    if (editIdx == 0) {
+      rtn.put("status", "0001");
+      rtn.put("msg", "수정 오류가 발생하였습니다.");
+    } else {
+      rtn.put("status", "0000");
+      rtn.put("msg", "데이터를 수정하였습니다.");
     }
     return rtn;
   }

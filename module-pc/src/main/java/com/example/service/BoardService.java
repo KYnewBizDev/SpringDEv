@@ -68,4 +68,10 @@ public class BoardService {
   public Long deleteBoard(String table, BoardDto boardDto) {
     return boardMyBatisRepository.deleteBoard(table, boardDto);
   }
+
+  // 상단고정/노출 적용
+  @Transactional
+  public Long editTopOpen(String table, BoardDto boardDto) {
+    return boardMyBatisRepository.editTopOpen(table, boardDto);
+  }
 }
