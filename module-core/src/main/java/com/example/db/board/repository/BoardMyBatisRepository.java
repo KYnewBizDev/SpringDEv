@@ -1,6 +1,5 @@
 package com.example.db.board.repository;
 
-import com.example.db.board.domain.Board;
 import com.example.db.board.dto.BoardDto;
 import com.example.db.board.dto.BoardSearchDto;
 import lombok.RequiredArgsConstructor;
@@ -19,15 +18,20 @@ public class BoardMyBatisRepository {
   private final BoardMapper boardMapper;
 
   // 리스트
-  public Page<Board> findLimit(BoardSearchDto search, Pageable pageable){
-    List<Board> content = boardMapper.findLimit(search, pageable);
-    Long total = boardMapper.findLimitCount(search);
+  public Page<BoardDto> findLimit(String table, BoardSearchDto search, String isDelete, Pageable pageable){
+    List<BoardDto> content = boardMapper.findLimit(table, search, isDelete, pageable);
+    Long total = boardMapper.findLimitCount(table, search, isDelete);
     return new PageImpl<>(content, pageable, total);
   }
 
   // 뷰
-  public Optional<Board> findByBoardId(String table, Long boardIdx, String isDelete) {
-    return boardMapper.findByBoardId(table, boardIdx, isDelete);
+  public Optional<BoardDto> findByBoardIdx(String table, Long boardIdx, String isDelete) {
+    return boardMapper.findByBoardIdx(table, boardIdx, isDelete);
+  }
+
+  // 뷰 (답변)
+  public Optional<BoardDto> findByParentIdx(String table, Long parentIdx, String isDelete) {
+    return boardMapper.findByParentIdx(table, parentIdx, isDelete);
   }
 
   // 조회수
@@ -35,6 +39,14 @@ public class BoardMyBatisRepository {
     boardMapper.editHit(table, boardIdx);
   }
 
+  // 상단고정/노출 적용
+  public Long editTopOpen(String table, BoardDto boardDto) {
+    boardMapper.editTopOpen(table, boardDto);
+    return boardDto.getBoardIdx();
+  }
+
+
+  //region /** crud **/
   // 등록
   public Long addBoard(String table, BoardDto boardDto) {
     boardMapper.addBoard(table, boardDto);
@@ -52,10 +64,5 @@ public class BoardMyBatisRepository {
     boardMapper.deleteBoard(table, boardDto);
     return boardDto.getBoardIdx();
   }
-
-  // 상단고정/노출 적용
-  public Long editTopOpen(String table, BoardDto boardDto) {
-    boardMapper.editTopOpen(table, boardDto);
-    return boardDto.getBoardIdx();
-  }
+  //endregion /** crud **/
 }

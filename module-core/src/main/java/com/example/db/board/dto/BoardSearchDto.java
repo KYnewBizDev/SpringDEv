@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BoardSearchDto {
-
     String table;
     String searchType;
     String searchWord;
@@ -17,13 +16,4 @@ public class BoardSearchDto {
     String isOpen;
     String category1;
     String category2;
-    String isDelete;
-
-    @Override
-    public String toString() {
-        return "BoardSearchDto{" +
-            "table='" + table + '\'' +
-            ", searchType='" + searchType + '\'' +
-            '}';
-    }
 }

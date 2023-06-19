@@ -1,4 +1,4 @@
-package com.example.db.boardFile.domain;
+package com.example.db.boardCommentFile.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -16,17 +16,17 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Getter
-public class BoardFile {
+public class BoardCommentFile {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(nullable = false)
-  @Comment("게시판 첨부파일 PK")
-  private Long boardFileIdx;
+  @Comment("게시판 댓글 첨부파일 PK")
+  private Long boardCommentFileIdx;
 
   @Comment("게시판 그룹 PK")
   private Long boardGroupIdx;
-  @Comment("게시판 PK")
-  private Long boardIdx;
+  @Comment("게시판 댓글 PK")
+  private Long boardCommentIdx;
   @Comment("첨부파일명")
   private String fileName;
   @Comment("첨부파일파일명")

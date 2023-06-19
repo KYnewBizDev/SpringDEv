@@ -1,6 +1,5 @@
 package com.example.db.board.dto;
 
-import com.example.db.board.domain.Board;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -13,8 +12,8 @@ import java.time.LocalDateTime;
 public class BoardDto {
   private Long boardIdx;
   private Long boardGroupIdx;
-  private Long boardCommentIdx;
   private Long parentIdx;
+  private Long boardCommentIdx;
   private String title;
   private String content;
   private String isTop;
@@ -41,37 +40,7 @@ public class BoardDto {
   private Long modifyIdx;
   private String isDelete;
 
-  public Board toEntity() {
-    return Board.builder()
-        .boardIdx(boardIdx)
-        .boardGroupIdx(boardGroupIdx)
-        .boardCommentIdx(boardCommentIdx)
-        .parentIdx(parentIdx)
-        .title(title)
-        .content(content)
-        .isTop(isTop)
-        .topDate(topDate)
-        .isOpen(isOpen)
-        .hit(hit)
-        .category1(category1)
-        .category2(category2)
-        .isReply(isReply)
-        .voc(voc)
-        .sort(sort)
-        .isHot(isHot)
-        .isNew(isNew)
-        .startDate(startDate)
-        .endDate(endDate)
-        .isAlltime(isAlltime)
-        .link1(link1)
-        .link2(link2)
-        .link1Target(link1Target)
-        .link2Target(link2Target)
-        .registerDate(registerDate)
-        .registerIdx(registerIdx)
-        .modifyDate(modifyDate)
-        .modifyIdx(modifyIdx)
-        .isDelete(isDelete)
-        .build();
-  }
+
+  private String registerName; // 작성자 이름
+  private String modifyName; // 수정자 이름
 }

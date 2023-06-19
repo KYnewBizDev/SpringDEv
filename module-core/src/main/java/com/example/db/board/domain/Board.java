@@ -25,10 +25,10 @@ public class Board {
 
   @Comment("게시판 그룹 PK")
   private Long boardGroupIdx;
-  @Comment("채택 게시판 댓글 PK")
-  private Long boardCommentIdx;
   @Comment("부모 PK")
   private Long parentIdx;
+  @Comment("채택 게시판 댓글 PK")
+  private Long boardCommentIdx;
   @Comment("제목")
   private String title;
   @Comment("내용")

@@ -2,10 +2,13 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.db.board.repository.BoardMapper">
 
-  <select id="findLimit" resultType="Board">
-    select * from ${search.table}
+  <select id="findLimit" resultType="BoardDto">
+    select t.*, m.name as registerName, m2.name as modifyName
+    from ${table} as t
+    left join member as m on t.register_idx=m.member_idx
+    left join member as m2 on t.modify_idx=m2.member_idx
     <include refid="likeSearch"/>
-    order by board_idx desc
+    order by t.board_idx desc
 
     <if test="pageable.paged">
       limit #{pageable.offset}, #{pageable.pageSize}
@@ -13,57 +16,69 @@
   </select>
 
   <select id="findLimitCount" resultType="long">
-    select count(*) from ${search.table}
+    select count(*) from ${table} as t
     <include refid="likeSearch"/>
   </select>
 
   <sql id="likeSearch">
     <where>
-      is_delete = #{search.isDelete}
+      t.is_delete = #{isDelete}
+      and ifnull(t.parent_idx,0) = 0
 
       <if test="search.searchWord != null and search.searchWord != ''">
         <if test="search.searchType != null and search.searchType != ''">
           <if test="search.searchType eq 'titleContent'">
-            and (title like CONCAT('%',#{search.searchWord},'%') or content like CONCAT('%',#{search.searchWord},'%'))
+            and (t.title like CONCAT('%',#{search.searchWord},'%') or t.content like CONCAT('%',#{search.searchWord},'%'))
           </if>
           <if test="search.searchType eq 'title'">
-            and title like CONCAT('%',#{search.searchWord},'%')
+            and t.title like CONCAT('%',#{search.searchWord},'%')
           </if>
           <if test="search.searchType eq 'content'">
-            and content like CONCAT('%',#{search.searchWord},'%')
+            and t.content like CONCAT('%',#{search.searchWord},'%')
           </if>
         </if>
         <if test="search.searchType == null or search.searchType == ''">
-          and (title like CONCAT('%',#{search.searchWord},'%') or content like CONCAT('%',#{search.searchWord},'%'))
+          and (t.title like CONCAT('%',#{search.searchWord},'%') or t.content like CONCAT('%',#{search.searchWord},'%'))
         </if>
       </if>
 
       <if test="search.startDate != null and search.startDate != '' and search.endDate != null and search.endDate != ''">
-        and date_format(register_date, '%Y-%m-%d') between #{search.startDate} and #{search.endDate}
+        and date_format(t.register_date, '%Y-%m-%d') between #{search.startDate} and #{search.endDate}
       </if>
       <if test="search.startDate != null and search.startDate != '' and (search.endDate == null or search.endDate == '')">
-        and date_format(register_date, '%Y-%m-%d') <![CDATA[>=]]> #{search.startDate}
+        and date_format(t.register_date, '%Y-%m-%d') <![CDATA[>=]]> #{search.startDate}
       </if>
       <if test="(search.startDate == null or search.startDate == '') and search.endDate != null and search.endDate != ''">
-        and date_format(register_date, '%Y-%m-%d') <![CDATA[<=]]> #{search.endDate}
+        and date_format(t.register_date, '%Y-%m-%d') <![CDATA[<=]]> #{search.endDate}
       </if>
 
       <if test="search.isOpen != null and search.isOpen != ''">
-        and is_open = #{search.isOpen}
+        and t.is_open = #{search.isOpen}
       </if>
       <if test="search.category1 != null and search.category1 != ''">
-        and category1 = #{search.category1}
+        and t.category1 = #{search.category1}
       </if>
       <if test="search.category2 != null and search.category2 != ''">
-        and category2 = #{search.category2}
+        and t.category2 = #{search.category2}
       </if>
     </where>
   </sql>
 
-  <select id="findByBoardId" resultType="Board">
-    select * from ${table} where is_delete = #{isDelete} and board_idx = #{boardIdx}
+  <select id="findByBoardIdx" resultType="BoardDto">
+    select t.*, m.name as register_name, m2.name as modify_name
+    from ${table} as t
+    left join member as m on t.register_idx=m.member_idx
+    left join member as m2 on t.modify_idx=m2.member_idx
+    where t.is_delete = #{isDelete} and t.board_idx = #{boardIdx}
   </select>
 
+  <select id="findByParentIdx" resultType="BoardDto">
+    select t.*, m.name as register_name, m2.name as modify_name
+    from ${table} as t
+    left join member as m on t.register_idx=m.member_idx
+    left join member as m2 on t.modify_idx=m2.member_idx
+    where t.is_delete = #{isDelete} and t.parent_idx = #{parentIdx}
+  </select>
 
   <update id="editHit">
     update ${table} set
@@ -71,11 +86,21 @@
     where board_idx = #{boardIdx}
   </update>
 
+  <update id="editTopOpen" parameterType="BoardDto" keyProperty="boardDto.boardIdx">
+    update ${table} set
+    modify_idx = #{boardDto.modifyIdx}
+    , is_top = ifnull(#{boardDto.isTop}, 'N')
+    , is_open = ifnull(#{boardDto.isOpen}, 'N')
+    where board_idx = #{boardDto.boardIdx}
+  </update>
+
+
+<!--  //region /** crud **/-->
   <insert id="addBoard" parameterType="BoardDto" useGeneratedKeys="true" keyProperty="boardDto.boardIdx">
     insert into ${table} (
       board_group_idx
-      , board_comment_idx
       , parent_idx
+      , board_comment_idx
       , title
       , content
       , is_top
@@ -100,8 +125,8 @@
       , modify_idx
     ) values (
       #{boardDto.boardGroupIdx}
-      , #{boardDto.boardCommentIdx}
       , #{boardDto.parentIdx}
+      , #{boardDto.boardCommentIdx}
       , #{boardDto.title}
       , #{boardDto.content}
       , ifnull(#{boardDto.isTop}, 'N')
@@ -130,8 +155,8 @@
   <update id="editBoard" parameterType="BoardDto" keyProperty="boardDto.boardIdx">
     update ${table} set
       board_group_idx = #{boardDto.boardGroupIdx}
-      , board_comment_idx = #{boardDto.boardCommentIdx}
       , parent_idx = #{boardDto.parentIdx}
+      , board_comment_idx = #{boardDto.boardCommentIdx}
       , title = #{boardDto.title}
       , content = #{boardDto.content}
       , is_top = ifnull(#{boardDto.isTop}, 'N')
@@ -162,13 +187,5 @@
       , is_delete = ifnull(#{boardDto.isDelete}, 'N')
     where board_idx = #{boardDto.boardIdx}
   </update>
-
-  <update id="editTopOpen" parameterType="BoardDto" keyProperty="boardDto.boardIdx">
-    update ${table} set
-      modify_idx = #{boardDto.modifyIdx}
-      , is_top = ifnull(#{boardDto.isTop}, 'N')
-      , is_open = ifnull(#{boardDto.isOpen}, 'N')
-    where board_idx = #{boardDto.boardIdx}
-  </update>
-
+  <!--  //endregion /** crud **/-->
 </mapper>

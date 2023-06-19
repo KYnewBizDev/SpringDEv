@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.db.boardComment.repository.BoardCommentMapper">
+
+  <select id="findLimit" resultType="BoardCommentDto">
+    select t.*, m.name as registerName, m2.name as modifyName
+    from ${table} as t
+    left join member as m on t.register_idx=m.member_idx
+    left join member as m2 on t.modify_idx=m2.member_idx
+    <include refid="likeSearch"/>
+    order by t.board_comment_idx desc
+
+    <if test="pageable.paged">
+      limit #{pageable.offset}, #{pageable.pageSize}
+    </if>
+  </select>
+
+  <select id="findLimitCount" resultType="long">
+    select count(*) from ${table} as t
+    <include refid="likeSearch"/>
+  </select>
+
+  <sql id="likeSearch">
+    <where>
+      t.is_delete = #{isDelete}
+      and t.board_idx = #{boardIdx}
+    </where>
+  </sql>
+
+  <select id="findByBoardCommentIdx" resultType="BoardCommentDto">
+    select t.*, m.name as register_name, m2.name as modify_name
+    from ${table} as t
+    left join member as m on t.register_idx=m.member_idx
+    left join member as m2 on t.modify_idx=m2.member_idx
+    where t.is_delete = #{isDelete} and t.board_comment_idx = #{boardCommentIdx}
+  </select>
+
+
+  <!--  //region /** crud **/-->
+  <insert id="addBoardComment" parameterType="BoardCommentDto" useGeneratedKeys="true" keyProperty="boardCommentDto.boardCommentIdx">
+    insert into ${table} (
+      board_idx
+      , board_group_idx
+      , content
+      , heart_num
+      , is_choose
+      , register_idx
+      , modify_idx
+    ) values (
+    #{boardCommentDto.boardIdx}
+      , ifnull(#{boardCommentDto.boardGroupIdx}, 0)
+      , #{boardCommentDto.content}
+      , ifnull(#{boardCommentDto.heartNum}, 0)
+      , ifnull(#{boardCommentDto.isChoose}, 'N')
+      , #{boardCommentDto.registerIdx}
+      , #{boardCommentDto.modifyIdx}
+    )
+  </insert>
+
+  <update id="editBoardComment" parameterType="BoardCommentDto" keyProperty="boardCommentDto.boardCommentIdx">
+    update ${table} set
+      board_idx = #{boardCommentDto.boardIdx}
+      , board_group_idx = ifnull(#{boardCommentDto.boardGroupIdx}, 0)
+      , content = #{boardCommentDto.content}
+      , heart_num = ifnull(#{boardCommentDto.heartNum}, 0)
+      , is_choose = ifnull(#{boardCommentDto.isChoose}, 'N')
+      , modify_idx = #{boardCommentDto.modifyIdx}
+    where board_comment_idx = #{boardCommentDto.boardCommentIdx}
+  </update>
+
+  <update id="deleteBoardComment" parameterType="BoardCommentDto" keyProperty="boardCommentDto.boardCommentIdx">
+    update ${table} set
+      modify_idx = #{boardCommentDto.modifyIdx}
+      , is_delete = ifnull(#{boardCommentDto.isDelete}, 'N')
+    where board_comment_idx = #{boardCommentDto.boardCommentIdx}
+  </update>
+  <!--  //endregion /** crud **/-->
+</mapper>

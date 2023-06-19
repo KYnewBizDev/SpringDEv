@@ -21,10 +21,10 @@ public class BoardFileService {
 
   // 리스트
   @Transactional(readOnly = true)
-  public List<BoardFileDto> getList(Long boardGroupIdx, Long boardIdx) {
-    List<BoardFile> boardFileList = boardFileQueryRepository.findAllByIsDelete(boardGroupIdx, boardIdx, "N");
-    List<BoardFileDto> boardFileDtoList = new ArrayList<>();
+  public List<BoardFileDto> getBoardFileList(Long boardGroupIdx, Long boardIdx) {
+    List<BoardFile> boardFileList = boardFileQueryRepository.findAll(boardGroupIdx, boardIdx, "N");
 
+    List<BoardFileDto> boardFileDtoList = new ArrayList<>();
     for (BoardFile boardFile : boardFileList) {
       BoardFileDto boardFileDto = new BoardFileDto();
       BeanUtils.copyProperties(boardFile,boardFileDto);
@@ -36,7 +36,8 @@ public class BoardFileService {
   // 뷰
   @Transactional(readOnly = true)
   public BoardFileDto getBoardFile(Long boardGroupIdx, Long boardIdx, Integer sort) {
-    Optional<BoardFile> boardFile = boardFileRepository.findTop1ByBoardGroupIdxAndBoardIdxAndSortAndIsDelete(boardGroupIdx, boardIdx, sort, "N");
+    Optional<BoardFile> boardFile = boardFileRepository.findByBoardGroupIdxAndBoardIdxAndSortAndIsDelete(boardGroupIdx, boardIdx, sort, "N");
+
     BoardFileDto boardFileDto = new BoardFileDto();
     boardFile.ifPresent(file -> BeanUtils.copyProperties(file, boardFileDto));
     return boardFileDto;

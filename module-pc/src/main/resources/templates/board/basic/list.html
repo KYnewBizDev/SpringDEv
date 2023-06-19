@@ -75,7 +75,7 @@
       <td><input type="checkbox" th:name="|idx[]|" th:id="|idx[${row.boardIdx}]|" th:value="${row.boardIdx}"></td>
       <td th:text="${list.getTotalElements - ((page-1) * list.size) - loop.index}">No</td>
       <td th:text="${row.title}"></td>
-      <td th:text="${row.registerIdx}"></td>
+      <td th:text="${row.registerName}"></td>
       <td th:text="${#temporals.format(row.registerDate, 'yyyy-MM-dd HH:mm:ss')}"></td>
       <td><input type="checkbox" th:name="|isTop[${row.boardIdx}]|" th:id="|isTop[${row.boardIdx}]|" th:checked="${#strings.equals(row.isTop,'Y')}" value="Y"></td>
       <td><input type="checkbox" th:name="|isOpen[${row.boardIdx}]|" th:id="|isOpen[${row.boardIdx}]|" th:checked="${#strings.equals(row.isOpen,'Y')}" value="Y"></td>

@@ -1,4 +1,4 @@
-package com.example.db.boardFile.domain;
+package com.example.db.boardCommentHeart.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -16,28 +16,19 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Getter
-public class BoardFile {
+public class BoardCommentHeart {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(nullable = false)
-  @Comment("게시판 첨부파일 PK")
-  private Long boardFileIdx;
+  @Comment("게시판 댓글 하트 PK")
+  private Long boardCommentHeartIdx;
 
   @Comment("게시판 그룹 PK")
   private Long boardGroupIdx;
-  @Comment("게시판 PK")
-  private Long boardIdx;
-  @Comment("첨부파일명")
-  private String fileName;
-  @Comment("첨부파일파일명")
-  private String originalFileName;
-  @Comment("pc/모바일")
-  @Column(length = 1)
-  @ColumnDefault("'N'")
-  private String isMobile;
-  @Comment("정렬")
-  @ColumnDefault("0")
-  private Integer sort;
+  @Comment("게시판 댓글 PK")
+  private Long boardCommentIdx;
+  @Comment("회원 PK")
+  private Long memberIdx;
 
   @Comment("등록일")
   @Column(updatable = false)

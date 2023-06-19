@@ -9,5 +9,5 @@ import java.util.Optional;
 @Repository
 public interface BoardFileRepository extends JpaRepository<BoardFile, Long> {
   // 뷰
-  Optional<BoardFile> findTop1ByBoardGroupIdxAndBoardIdxAndSortAndIsDelete(Long boardGroupIdx, Long boardIdx, Integer sort, String isDelete);
+  Optional<BoardFile> findByBoardGroupIdxAndBoardIdxAndSortAndIsDelete(Long boardGroupIdx, Long boardIdx, Integer sort, String isDelete);
 }
