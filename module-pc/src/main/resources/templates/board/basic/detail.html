@@ -67,7 +67,7 @@
   </table>
 
   <div class="bottom-btn">
-    <button type="button" th:onclick="|location.href='@{/bbs/{table}/editForm/{boardIdx} (table=${table}, boardIdx=${row.boardIdx})}'|">수정</button>
+    <button type="button" th:onclick="|location.href='@{/bbs/{table}/edit/{boardIdx} (table=${table}, boardIdx=${row.boardIdx})}'|">수정</button>
     <button type="button" th:onclick="|location.href='@{/bbs/{table}/list (table=${table})}'|">목록</button>
   </div>
 

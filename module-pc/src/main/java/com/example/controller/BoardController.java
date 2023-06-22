@@ -53,11 +53,11 @@ public class BoardController {
           editHit(table, id);
           return basicDetail(table, id, model);
         }
-        case "addForm" -> {
-          return basicAddForm(table, model);
+        case "add" -> {
+          return basicAdd(table, model);
         }
-        case "editForm" -> {
-          return basicEditForm(table, id, model);
+        case "edit" -> {
+          return basicEdit(table, id, model);
         }
       }
     }
@@ -119,14 +119,14 @@ public class BoardController {
   }
 
   // 등록 폼 (basic)
-  public String basicAddForm(String table, Model model) {
+  public String basicAdd(String table, Model model) {
     model.addAttribute("table", table);
     model.addAttribute("row", new BoardDto());
-    return "board/basic/addForm";
+    return "board/basic/add";
   }
 
   // 수정 폼 (basic)
-  public String basicEditForm(String table, Long boardIdx, Model model) {
+  public String basicEdit(String table, Long boardIdx, Model model) {
     BoardDto row = boardService.getBoard(table, boardIdx);
     List<BoardFileDto> files = boardFileService.getBoardFileList(row.getBoardGroupIdx(), boardIdx);
 
@@ -138,7 +138,7 @@ public class BoardController {
     model.addAttribute("table", table);
     model.addAttribute("row", row);
     model.addAttribute("files", files);
-    return "board/basic/editForm";
+    return "board/basic/edit";
   }
   //endregion basic
 
@@ -181,7 +181,7 @@ public class BoardController {
 
   //region /** crud **/
   // 등록
-  @PostMapping({"bbs/{table}/addForm", "bbs/{table}/addReply"})
+  @PostMapping({"bbs/{table}/add", "bbs/{table}/addReply"})
   public String addBoard(@PathVariable("table") String table, BoardDto boardDto, @RequestParam("file[]") MultipartFile[] files, Model model, Authentication authentication, RedirectAttributes redirectAttributes) {
     // get boardGroupIdx
     BoardGroupDto boardGroup = boardGroupService.getBoardGroupCode(table);
@@ -229,7 +229,7 @@ public class BoardController {
   }
 
   // 수정
-  @PostMapping({"bbs/{table}/editForm/{id}", "bbs/{table}/editReply/{id}"})
+  @PostMapping({"bbs/{table}/edit/{id}", "bbs/{table}/editReply/{id}"})
   public String editBoard(@PathVariable("table") String table, @PathVariable("id") Long boardIdx, BoardDto boardDto, @RequestParam("file[]") MultipartFile[] files, Model model, Authentication authentication, RedirectAttributes redirectAttributes) {
     // 기존정보
     BoardDto boardDtoUpdate = boardService.getBoard(table, boardIdx);

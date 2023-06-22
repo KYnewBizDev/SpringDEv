@@ -53,7 +53,7 @@ public class UserController {
 
   // 등록 폼
   @GetMapping("user/add")
-  public String addForm(Model model) {
+  public String add(Model model) {
     model.addAttribute("row", new UserDto());
     return "user/add";
   }
@@ -95,7 +95,7 @@ public class UserController {
 
   // 수정 폼
   @GetMapping("user/edit/{id}")
-  public String editForm(@PathVariable("id") Long id, Model model) {
+  public String edit(@PathVariable("id") Long id, Model model) {
     UserDto row = userService.getUser(id);
     model.addAttribute("row", row);
 

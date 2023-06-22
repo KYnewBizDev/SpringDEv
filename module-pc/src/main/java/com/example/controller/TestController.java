@@ -75,7 +75,7 @@ public class TestController {
 
   // 등록 폼
   @GetMapping("test/add")
-  public String addForm(Model model) {
+  public String add(Model model) {
     model.addAttribute("row", new TestDto());
     return "test/add";
   }
@@ -107,7 +107,7 @@ public class TestController {
 
   // 수정 폼
   @GetMapping("test/edit/{id}")
-  public String editForm(@PathVariable("id") Long id, Model model) {
+  public String edit(@PathVariable("id") Long id, Model model) {
     TestDto row = testService.getTest(id);
     model.addAttribute("row", row);
 
